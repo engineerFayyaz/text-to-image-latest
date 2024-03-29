@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ImageGenerator.css';
+import Header from '../Header';
+
 
 const ImageGenerator = () => {
     const [imageUrls, setImageUrls] = useState([]);
@@ -69,6 +71,10 @@ const ImageGenerator = () => {
     };
 
     return (
+
+         <>
+        <Header />
+        
         <div className='ai-image-generator'>
             <div className="header">
                 Ai image <span>generator</span>
@@ -110,6 +116,7 @@ const ImageGenerator = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 
