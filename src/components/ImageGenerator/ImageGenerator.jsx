@@ -91,9 +91,9 @@ const ImageGenerator = () => {
                     {loading && <div className="loading-text">{`${progress}% Loaded`}</div>}
                 </div>
             </div>
-            <div className="input-fields">
-                <label htmlFor="numImages">Number of Images:</label>
-                <input type="number" id="numImages" ref={numImagesRef} value={numImages} onChange={(e) => setNumImages(parseInt(e.target.value))} />
+            <div className="input-fields form-group">
+                <label htmlFor="numImages" className='mx-2'><b>Number of Images:</b></label>
+                <input type="number" className='p-2 ' id="numImages" ref={numImagesRef} value={numImages} onChange={(e) => setNumImages(parseInt(e.target.value))} style={{borderRadius:"10px",outline:"none",boxShadow:"none",border:"2px solid #cecece"}}  />
             </div>
             <div className="aspect-ratio-selection">
                 {aspectRatios.map((ratio, index) => (
