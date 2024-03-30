@@ -72,50 +72,52 @@ const ImageGenerator = () => {
 
     return (
 
-         <>
-        <Header />
-        
-        <div className='ai-image-generator'>
-            <div className="header">
-                Ai image <span>generator</span>
-            </div>
-            
-            <div className="img-loading">
-                <div className="image-grid">
-                    {imageUrls.map((url, index) => (
-                        <img key={index} src={url} alt={`Generated Image ${index + 1}`} style={{ aspectRatio: aspectRatios[selectedAspectRatioIndex], width:"250px" }} />
+        <>
+            <Header />
+
+            <div className='ai-image-generator'>
+                <div className="header">
+                    Ai image <span>generator</span>
+                </div>
+                <p5>
+                    Transform your ideas into stunning images with just a few words. Imagine, describe, and create!
+                </p5>
+                <div className="img-loading">
+                    <div className="image-grid">
+                        {imageUrls.map((url, index) => (
+                            <img key={index} src={url} alt={`Generated Image ${index + 1}`} style={{ aspectRatio: aspectRatios[selectedAspectRatioIndex], width: "250px" }} />
+                        ))}
+                    </div>
+                    <div className="loading">
+                        <div className={loading ? "loading-bar-full" : "loading-bar"} style={{ width: `${progress}%` }}></div>
+                        {loading && <div className="loading-text">{`${progress}% Loaded`}</div>}
+                    </div>
+                </div>
+                <div className="input-fields form-group">
+                    <label htmlFor="numImages" className='mx-2'><b>Number of Images:</b></label>
+                    <input type="number" className='p-2 ' id="numImages" ref={numImagesRef} value={numImages} onChange={(e) => setNumImages(parseInt(e.target.value))} style={{ borderRadius: "10px", outline: "none", boxShadow: "none", border: "2px solid #cecece" }} />
+                </div>
+                <div className="aspect-ratio-selection">
+                    {aspectRatios.map((ratio, index) => (
+                        <div key={index} className={`aspect-ratio ${index === selectedAspectRatioIndex ? 'selected' : ''}`} onClick={() => selectAspectRatio(index)}>
+                            {ratio}
+                        </div>
                     ))}
                 </div>
-                <div className="loading">
-                    <div className={loading ? "loading-bar-full" : "loading-bar"} style={{ width: `${progress}%` }}></div>
-                    {loading && <div className="loading-text">{`${progress}% Loaded`}</div>}
-                </div>
-            </div>
-            <div className="input-fields form-group">
-                <label htmlFor="numImages" className='mx-2'><b>Number of Images:</b></label>
-                <input type="number" className='p-2 ' id="numImages" ref={numImagesRef} value={numImages} onChange={(e) => setNumImages(parseInt(e.target.value))} style={{borderRadius:"10px",outline:"none",boxShadow:"none",border:"2px solid #cecece"}}  />
-            </div>
-            <div className="aspect-ratio-selection">
-                {aspectRatios.map((ratio, index) => (
-                    <div key={index} className={`aspect-ratio ${index === selectedAspectRatioIndex ? 'selected' : ''}`} onClick={() => selectAspectRatio(index)}>
-                        {ratio}
+                <div className="search-box">
+                    <input type="text" ref={inputRef} className='search-input' placeholder='Describe what you want to see' />
+                    <div className="generate-btn" onClick={() => { imageGenerator() }}>
+                        Generate
                     </div>
-                ))}
-            </div>
-            <div className="search-box">
-                <input type="text" ref={inputRef} className='search-input' placeholder='Describe what you want to see' />
-                <div className="generate-btn" onClick={() => { imageGenerator() }}>
-                    Generate
                 </div>
+                {/* Popup message */}
+                {errorMessage && (
+                    <div className="popup">
+                        <p>{errorMessage}</p>
+                        <button onClick={() => setErrorMessage("")}>Close</button>
+                    </div>
+                )}
             </div>
-            {/* Popup message */}
-            {errorMessage && (
-                <div className="popup">
-                    <p>{errorMessage}</p>
-                    <button onClick={() => setErrorMessage("")}>Close</button>
-                </div>
-            )}
-        </div>
         </>
     );
 };

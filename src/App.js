@@ -1,10 +1,10 @@
 import "./App.css";
-import ImageGenerator from "./components/ImageGenerator/ImageGenerator";
+import Routes from "../src/Routes"
 
 function App() {
   return (
     <div>
-      <ImageGenerator />
+      <Routes/>
     </div>
   );
 }
