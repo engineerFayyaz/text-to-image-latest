@@ -1,123 +1,221 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ImageGenerator.css';
+import { Container, Row, Col, Form, Button, Card, ProgressBar } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Header from '../Header';
 
-
 const ImageGenerator = () => {
-    const [imageUrls, setImageUrls] = useState([]);
+    const [originalImageUrl, setOriginalImageUrl] = useState("");
+    const [generatedImageUrls, setGeneratedImageUrls] = useState([]);
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [errorMessage, setErrorMessage] = useState(""); // State variable for error message
-    const [numImages, setNumImages] = useState(1); // State variable for the number of images
-    const [aspectRatios, setAspectRatios] = useState(["1:1", "3:4", "4:3"]); // State variable for aspect ratios
-    const [selectedAspectRatioIndex, setSelectedAspectRatioIndex] = useState(0); // State variable for selected aspect ratio index
-    let inputRef = useRef(null);
-    let numImagesRef = useRef(null);
+    const [inspirationText, setInspirationText] = useState("");
+    const [colorSaturation, setColorSaturation] = useState(50);
+    const [brightness, setBrightness] = useState(50);
+    const [contrast, setContrast] = useState(50);
+    const [posterSize, setPosterSize] = useState("A4");
+    const [numImages, setNumImages] = useState(1);
+
+    const inputRef = useRef(null);
+    const numImagesRef = useRef(null);
+    const canvasRef = useRef(null);
 
     const imageGenerator = async () => {
-        if (inputRef.current.value === "") {
-            setErrorMessage("Please enter a description.");
+        if (!inputRef.current || !inputRef.current.value) {
+            toast.error("Please enter a description.");
             return;
         }
+
         setLoading(true);
         setProgress(0);
 
-        const response = await fetch(
-            "https://api.openai.com/v1/images/generations",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization:
-                        "Bearer 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",
-                    "User-Agent": "Chrome",
-                },
-                body: JSON.stringify({
-                    prompt: `${inputRef.current.value}`,
-                    n: numImages,
-                }),
-            }
-        );
+        try {
+            const response = await fetch(
+                "https://api.openai.com/v1/images/generations",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization:
+                            "Bearer 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",
+                        "User-Agent": "Chrome",
+                    },
+                    body: JSON.stringify({
+                        prompt: inputRef.current.value,
+                        n: numImages,
+                    }),
+                }
+            );
 
-        if (response.ok) {
-            let data = await response.json();
-            let data_array = data.data;
-            if (data_array && data_array.length > 0) {
-                const urls = data_array.map(item => item.url);
-                setImageUrls(urls);
+            if (response.ok) {
+                const data = await response.json();
+                const imageUrls = data.data.map(item => item.url);
+                setOriginalImageUrl(imageUrls[0]);
+                setGeneratedImageUrls(imageUrls.slice(1));
             } else {
-                setErrorMessage("No image data received from the API");
+                toast.error("Failed to fetch image data from the API");
             }
-        } else {
-            setErrorMessage("Failed to fetch image data from the API");
+        } catch (error) {
+            console.error("Error:", error);
+            toast.error("An error occurred while fetching image data");
         }
 
         setLoading(false);
-        setProgress(100); // Update progress to 100 at the end of image generation
+        setProgress(100);
     };
-
 
     useEffect(() => {
         if (!loading) {
             setTimeout(() => {
                 setProgress(0);
-            }, 3000); // Reset progress after 3 seconds
+            }, 3000);
         }
     }, [loading]);
 
-    // Function to handle aspect ratio selection
-    const selectAspectRatio = (index) => {
-        setSelectedAspectRatioIndex(index);
+    useEffect(() => {
+        if (originalImageUrl && generatedImageUrls.length > 0) {
+            drawImages();
+        }
+    }, [originalImageUrl, generatedImageUrls]);
+
+    const drawImages = () => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+    
+        // Clear canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    
+        const generatedImages = generatedImageUrls.map((url, index) => {
+            const img = new Image();
+            img.onload = () => {
+                const x = (index % 2) * (canvas.width / 2);
+                const y = Math.floor(index / 2) * (canvas.height / 2);
+                context.drawImage(img, x, y, canvas.width / 2, canvas.height / 2);
+            };
+            img.src = url;
+            return img;
+        });
+    };
+    
+
+    const handleInspirationTextChange = (text) => {
+        setInspirationText(text);
+    };
+
+    const handleColorSaturationChange = (value) => {
+        setColorSaturation(value);
+    };
+
+    const handleBrightnessChange = (value) => {
+        setBrightness(value);
+    };
+
+    const handleContrastChange = (value) => {
+        setContrast(value);
+    };
+
+    const handlePosterSizeChange = (size) => {
+        setPosterSize(size);
+    };
+
+    const handleNumImagesChange = (value) => {
+        if (value === 4) {
+            toast.error("Please upgrade your package to premium to generate more than 3 images.");
+        } else {
+            setNumImages(value);
+            numImagesRef.current = value;
+        }
     };
 
     return (
-
         <>
             <Header />
+            <ToastContainer />
+            <Container>
+                <Row className='image-generator mt-20'>
+                    <Col md={4}>
+                        <Card>
+                            <Card.Body>
+                                <h3>Number of Images</h3>
+                                <Button onClick={() => handleNumImagesChange(1)} variant={numImages === 1 ? 'primary' : 'light'}>1</Button>
+                                <Button onClick={() => handleNumImagesChange(2)} variant={numImages === 2 ? 'primary' : 'light'}>2</Button>
+                                <Button onClick={() => handleNumImagesChange(3)} variant={numImages === 3 ? 'primary' : 'light'}>3</Button>
+                                <Button onClick={() => handleNumImagesChange(4)} variant={numImages === 4 ? 'primary' : 'light'}>4</Button>
+                            </Card.Body>
+                        </Card>
+                        <Card className='mt-2'>
+                            <Card.Body>
+                                <h3>Poster Size</h3>
+                                <Form.Group>
+                                    <Form.Check
+                                        type="radio"
+                                        label="A4"
+                                        name="posterSize"
+                                        checked={posterSize === "A4"}
+                                        onChange={() => handlePosterSizeChange("A4")}
+                                    />
+                                    <Form.Check
+                                        type="radio"
+                                        label="A3"
+                                        name="posterSize"
+                                        checked={posterSize === "A3"}
+                                        onChange={() => handlePosterSizeChange("A3")}
+                                    />
+                                </Form.Group>
+                            </Card.Body>
+                        </Card>
+                        <Card className='mt-2'>
+                            <Card.Body>
+                                <h3>Inspiration Text</h3>
+                                <Form.Group>
+                                    <Form.Control type="text" ref={inputRef} value={inspirationText} onChange={(e) => handleInspirationTextChange(e.target.value)} />
+                                </Form.Group>
+                            </Card.Body>
+                        </Card>
+                        <Card className='mt-2'>
+                            <Card.Body>
+                                <h3>Customization</h3>
+                                <Form.Group>
+                                    <Form.Label>Color Saturation:</Form.Label>
+                                    <Form.Control type="range" min="0" max="100" value={colorSaturation} onChange={(e) => handleColorSaturationChange(parseInt(e.target.value))} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Brightness:</Form.Label>
+                                    <Form.Control type="range" min="0" max="100" value={brightness} onChange={(e) => handleBrightnessChange(parseInt(e.target.value))} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Contrast:</Form.Label>
+                                    <Form.Control type="range" min="0" max="100" value={contrast} onChange={(e) => handleContrastChange(parseInt(e.target.value))} />
+                                </Form.Group>
+                            </Card.Body>
+                        </Card>
+                        <Card className='mt-2'>
+                            <Card.Body>
+                                <Button onClick={imageGenerator} variant="primary">Generate</Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={8}>
+                        <div className="live-preview">
+                            <h2>Live Preview</h2>
+                            <ProgressBar animated now={progress} label={`${progress}%`} />
+                            {loading && <p>Loading...</p>}
+                            {/* Display the grid of images */}
+                            <div className="image-grid">
+                                {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
+                                {generatedImageUrls.slice(0, numImages).map((url, index) => (
+                                    <img key={index} src={url} alt={`Generated ${index + 1}`} className="generated-image" />
+                                ))}
 
-            <div className='ai-image-generator'>
-                <div className="header">
-                    Ai image <span>generator</span>
-                </div>
-                <p5>
-                    Transform your ideas into stunning images with just a few words. Imagine, describe, and create!
-                </p5>
-                <div className="img-loading">
-                    <div className="image-grid">
-                        {imageUrls.map((url, index) => (
-                            <img key={index} src={url} alt={`Generated Image ${index + 1}`} style={{ aspectRatio: aspectRatios[selectedAspectRatioIndex], width: "250px" }} />
-                        ))}
-                    </div>
-                    <div className="loading">
-                        <div className={loading ? "loading-bar-full" : "loading-bar"} style={{ width: `${progress}%` }}></div>
-                        {loading && <div className="loading-text">{`${progress}% Loaded`}</div>}
-                    </div>
-                </div>
-                <div className="input-fields form-group">
-                    <label htmlFor="numImages" className='mx-2'><b>Number of Images:</b></label>
-                    <input type="number" className='p-2 ' id="numImages" ref={numImagesRef} value={numImages} onChange={(e) => setNumImages(parseInt(e.target.value))} style={{ borderRadius: "10px", outline: "none", boxShadow: "none", border: "2px solid #cecece" }} />
-                </div>
-                <div className="aspect-ratio-selection">
-                    {aspectRatios.map((ratio, index) => (
-                        <div key={index} className={`aspect-ratio ${index === selectedAspectRatioIndex ? 'selected' : ''}`} onClick={() => selectAspectRatio(index)}>
-                            {ratio}
+                            </div>
+                            {/* Use canvas to edit images */}
+                            <canvas ref={canvasRef} />
                         </div>
-                    ))}
-                </div>
-                <div className="search-box">
-                    <input type="text" ref={inputRef} className='search-input' placeholder='Describe what you want to see' />
-                    <div className="generate-btn" onClick={() => { imageGenerator() }}>
-                        Generate
-                    </div>
-                </div>
-                {/* Popup message */}
-                {errorMessage && (
-                    <div className="popup">
-                        <p>{errorMessage}</p>
-                        <button onClick={() => setErrorMessage("")}>Close</button>
-                    </div>
-                )}
-            </div>
+                    </Col>
+
+                </Row>
+            </Container>
         </>
     );
 };

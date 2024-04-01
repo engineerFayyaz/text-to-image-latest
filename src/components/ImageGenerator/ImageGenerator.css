@@ -29,7 +29,20 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  /* gap: 20px; */
+}
+
+.image-grid img {
+  width: calc(50% - 10px);
+  margin: 5px;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .image-grid img {
+    width: calc(100% - 10px);
+  }
 }
 
 .search-box {
@@ -97,7 +110,7 @@
 
 @media only screen and (max-width: 600px) {
   .ai-image-generator {
-    margin-top: 40px;
+    margin-top: 100px;
     margin-bottom: 10px;
   }
 
@@ -131,6 +144,11 @@
 
 .aspect-ratio.selected {
   background-color: #de1889;
+}
+
+
+.image-generator.mt-20.row {
+  margin-top: 111px;
 }
 
 
