@@ -53,7 +53,7 @@ const Header = () => {
             </ul>
           </div>
           <span className="navbar-text">
-            <Link to="#" className="nav-link">Login</Link>
+            <Link to="/authentication" className="nav-link">Login</Link>
           </span>
         </div>
       </nav>
