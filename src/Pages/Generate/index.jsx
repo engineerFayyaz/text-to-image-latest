@@ -4,8 +4,6 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import "./generate.css"
 import Footer from '../../components/Footer';
 
-
-
 function Generate() {
     const [activeLabel, setActiveLabel] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState(false);
