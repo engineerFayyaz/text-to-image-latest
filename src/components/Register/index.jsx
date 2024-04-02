@@ -6,7 +6,7 @@ import "../../firebaseConfig";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loader";
-
+import { storeUserToLocalStorage } from "../../Utils/localStorage";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +22,6 @@ const Register = () => {
     e.preventDefault();
     setLoading(true); // Start loading
 
-    const auth = getAuth();
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -32,6 +30,10 @@ const Register = () => {
       );
       // Signed up successfully
       const user = userCredential.user;
+
+      // Store user data to local storage
+      storeUserToLocalStorage({ name, email });
+
       toast.success("You are successfully registered!");
       console.log("User registered:", user);
 

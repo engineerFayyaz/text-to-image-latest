@@ -9,6 +9,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loader";
+import { storeUserToLocalStorage } from "../../Utils/localStorage"; // Importing the function
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,6 +31,10 @@ const Login = () => {
         password
       );
       const user = userCredential.user;
+
+      // Store user data to local storage
+      storeUserToLocalStorage({ name: user.displayName, email: user.email });
+
       toast.success("You are successfully logged in!");
       console.log("User logged in:", user);
       navigate("/");
@@ -58,6 +63,10 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log("Google Sign-In Successful:", user);
+
+        // Store user data to local storage
+        storeUserToLocalStorage({ name: user.displayName, email: user.email });
+
         navigate("/");
       })
       .catch((error) => {
