@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../../components/Header";
+import Footer from '../../components/Footer';
 
 function PromptGuide() {
     return (
@@ -111,7 +112,7 @@ function PromptGuide() {
                     </ul>
                 </div>
             </section>
-
+            <Footer/>
         </>
     )
 };

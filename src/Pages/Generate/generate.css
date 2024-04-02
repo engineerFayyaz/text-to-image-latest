@@ -1,0 +1,151 @@
+.conteiner {
+  background-color: black;
+}
+
+.textbox textarea {
+  width: 250px;
+  padding: 10px;
+  background-color: rgb(118, 116, 116);
+  color: white;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #e633ff 15%, #3d91ff) 1;
+  border-image-slice: 1;
+}
+
+.textbox {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #e633ff 15%, #3d91ff) 1;
+  border-image-slice: 1;
+}
+.radio-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.radio-container1 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-container label {
+  background-color: rgb(97, 94, 94);
+  padding: 10px;
+  color: white;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #e633ff 15%, #3d91ff) 1;
+  border-image-slice: 1;
+  margin-top: 3px;
+  width: 127px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-radius: 10px; */
+  color: white;
+}
+
+.radio-container1 label {
+  background-color: rgb(97, 94, 94);
+  padding: 10px;
+  color: white;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #e633ff 15%, #3d91ff) 1;
+  border-image-slice: 1;
+  margin-top: 3px;
+  width: 85px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-radius: 10px; */
+  color: white;
+}
+.radio-label {
+  padding: 5px 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.radio-label.active {
+  background-color: black;
+  color: white;
+  color: white;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #e633ff 15%, #3d91ff) 1;
+  border-image-slice: 1;
+}
+.dropdown-menu {
+  width: 250px !important;
+}
+.textbox button {
+  width: 200px;
+  background: linear-gradient(to right, #60a5fa, #8b5cf6);
+  border-radius: 10px;
+  color: black;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+.textbox button:hover {
+  background: linear-gradient(to right, blue, rgb(152, 151, 151));
+  color: white;
+}
+.overflow-y-scroll {
+  max-height: 320px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #f0f0f0;
+}
+
+.overflow-y-scroll::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 10px;
+}
+
+.overflow-y-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.overflow-y-scroll::-webkit-scrollbar-thumb {
+  background-color: #60a5fa;
+  border-radius: 10px;
+}
+.side_image img {
+  width: 100%;
+  height: 100%;
+}
+
+.side_text p {
+  color: #774f06;
+  font-size: 13px;
+}
+.nav-item img {
+  width: 60px;
+  height: 61px;
+}
+
+.center_dropdown_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.icon-rotate {
+  transform: rotate(180deg); /* Rotate the icon 180 degrees */
+  transition: transform 0.3s ease; /* Smooth transition */
+}

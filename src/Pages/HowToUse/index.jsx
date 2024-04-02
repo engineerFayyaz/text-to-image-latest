@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"; // Import Link from React Router
 import Header from "../../components/Header";
 import { ArrowLeft } from 'react-bootstrap-icons'; // Import ArrowLeft icon from React Bootstrap
 import "../HowToUse/Howtouse.css";
+import "../HowToUse/Howtouse.css"
+import Footer from '../../components/Footer';
 
 function HowToUse() {
     return (
@@ -86,6 +88,8 @@ function HowToUse() {
                     </Link>
                 </div>
             </div>
+
+            <Footer />
         </>
     )
 }
