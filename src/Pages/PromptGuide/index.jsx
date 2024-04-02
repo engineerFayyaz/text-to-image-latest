@@ -8,7 +8,7 @@ function PromptGuide() {
         <Header/>
             <section id="writing" className="relative overflow-hidden pt-32 pb-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-                    <div className="mx-auto mb-10 flex flex-col items-center">
+                    <div className="mx-auto mb-10 flex flex-col items-center p-2">
                         <h2 className="tracking-tight text-white text-lg break-words">
                             Writing effective prompts for an AI Image Generator, such as those used
                             in AI art creation tools, involves a blend of creativity, specificity,

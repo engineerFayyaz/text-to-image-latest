@@ -71,13 +71,14 @@ const Header = () => {
           </div>
           {userData ? (
             <div className="dropdown">
-              <Link
-                className="navbar-text dropdown-toggle text-light  "
+              <button
+                className="btn btn-outline-info navbar-text dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {userData.name}
-              </Link>
+                {/* {userData.name} */}
+                {userData.email}
+              </button>
               <ul className="dropdown-menu">
                 <li>
                   <button className="dropdown-item" onClick={handleLogout}>
@@ -87,7 +88,7 @@ const Header = () => {
               </ul>
             </div>
           ) : (
-            <Link to="/authentication" className="nav-link text-light">
+            <Link to="/authentication" className="nav-link login-text text-light">
               Login
             </Link>
           )}

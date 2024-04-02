@@ -34,7 +34,7 @@ const Login = () => {
 
       // Store user data to local storage
       storeUserToLocalStorage({ name: user.displayName, email: user.email });
-
+      
       toast.success("You are successfully logged in!");
       console.log("User logged in:", user);
       navigate("/");

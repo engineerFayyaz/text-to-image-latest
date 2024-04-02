@@ -10,7 +10,6 @@ function Home() {
             <Header />
             <ImageGenerator />
             <HomeImages/>
-
             <Footer/>
         </>
     )

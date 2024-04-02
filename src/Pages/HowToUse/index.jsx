@@ -9,8 +9,16 @@ import Footer from '../../components/Footer';
 function HowToUse() {
     return (
         <>
-            <Header />
-            <section id="creating" className="relative overflow-hidden pt-32 pb-20">
+           <Header />
+             {/* Back button with ArrowLeft icon */}
+             <div className="fixed-back-icon  bg-gray-900">
+                <div className="text-center">
+                    <Link to="/">
+                        <ArrowLeft size={24} /> Back
+                    </Link>
+                </div>
+            </div>
+            <section id="creating" className="relative overflow-hidden pt-2 pb-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
                     <div className="mx-auto mb-10 flex flex-col items-center">
                         <h2 className="tracking-tight text-white text-3xl font-bold break-words">
@@ -80,14 +88,7 @@ function HowToUse() {
                 </div>
             </section>
             
-            {/* Back button with ArrowLeft icon */}
-            <div className="fixed-back-icon top-0 left-50 bg-gray-900 p-4 z-10">
-                <div className="text-center">
-                    <Link to="/">
-                        <ArrowLeft size={24} /> Back
-                    </Link>
-                </div>
-            </div>
+          
 
             <Footer />
         </>

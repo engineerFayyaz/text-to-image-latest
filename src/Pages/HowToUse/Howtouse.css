@@ -74,19 +74,17 @@
   }
 
   h2.tracking-tight.text-white.text-lg.break-words {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    line-height: 30px;
+    text-align: justify;
+    padding: 10px 7rem;
 }
 
 
 /* Styling for the sticky back button */
-.fixed-back-icon {
-    position: fixed;
-    top: 50;
-    left: 0;
-    width: 100%;
-    padding: 40px; /* Adjust padding as needed */
-    z-index: 1000; /* Adjust z-index as needed */
-  }
+.fixed-back-icon{
+    margin-top: 2rem;
+}
   
   .fixed-back-icon a {
     color: black; /* Change the text color as needed */
@@ -96,10 +94,13 @@
     border-radius: 5px; /* Adjust border radius as needed */
     margin-top: 65px;
     align-items: end;
+    transition: all .3s ease-in-out;
   }
   
   .fixed-back-icon a:hover {
-    background-color: #555; /* Change the background color on hover as needed */
+    background-color: #555;
+    color: white; /* Change the background color on hover as needed */
+    transform: translateX(-10px);
   }
   
 
