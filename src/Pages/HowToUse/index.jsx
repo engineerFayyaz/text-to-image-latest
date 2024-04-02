@@ -13,9 +13,9 @@ function HowToUse() {
             <section id="creating" className="relative overflow-hidden pt-32 pb-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
                     <div className="mx-auto mb-10 flex flex-col items-center">
-                        <h2 className="tracking-tight text-white text-3xl font-bold break-words">
+                        <h4 className="tracking-tight text-white text-3xl font-bold break-words">
                             Creating AI-Generated Images with Ease: A Step-by-Step Guide
-                        </h2>
+                        </h4>
                     </div>
                     <ul className="grid grid-cols-1 gap-4">
                         <li className="relative p-6 text-black rounded-xl bg-[#f7f6f2] [box-shadow:rgb(167,_139,_250)_5px_5px]">
