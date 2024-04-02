@@ -1,11 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from React Router
 import Header from "../../components/Header";
+import { ArrowLeft } from 'react-bootstrap-icons'; // Import ArrowLeft icon from React Bootstrap
+import "../HowToUse/Howtouse.css";
 import "../HowToUse/Howtouse.css"
 import Footer from '../../components/Footer';
 
 function HowToUse() {
     return (
-
         <>
             <Header />
             <section id="creating" className="relative overflow-hidden pt-32 pb-20">
@@ -77,9 +79,19 @@ function HowToUse() {
                     </ul>
                 </div>
             </section>
+            
+            {/* Back button with ArrowLeft icon */}
+            <div className="fixed-back-icon top-0 left-50 bg-gray-900 p-4 z-10">
+                <div className="text-center">
+                    <Link to="/">
+                        <ArrowLeft size={24} /> Back
+                    </Link>
+                </div>
+            </div>
 
             <Footer />
         </>
     )
 }
+
 export default HowToUse;

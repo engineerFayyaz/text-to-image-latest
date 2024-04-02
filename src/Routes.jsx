@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../src/Pages/Home"
 import HowToUse from "./Pages/HowToUse";
 import PromptGuide from "./Pages/PromptGuide";
+import Authentication from "./Pages/Authentication";
 import Generate from "./Pages/Generate";
 // import NotFound from "pages/NotFound";
 
@@ -14,6 +15,7 @@ const ProjectRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/How-to-use" element={<HowToUse/>}/>
           <Route path="/Prompt-guide" element={<PromptGuide/>}/>
+          <Route path="/Authentication" element={<Authentication/>}/>
           <Route path="/Generate" element={<Generate/>}/>
           {/* <Route path="*" element={<NotFound />} /> */}
           

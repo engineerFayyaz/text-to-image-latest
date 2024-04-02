@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.authmain{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background: url(../../../public/images/bg5.png);
+  background-color:  rgba(0, 0, 0, 0.721);
+  background-blend-mode: multiply;
+  background-position: left ;
+
+}
+
+.authcontainer{
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.authcontainer p{
+    font-size: 19px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+.authcontainer h1{
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'Montserrat';
+}
+.authcontainer span{
+    font-size: 12px;
+}
+
+.authcontainer a{
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+}
+
+.authcontainer .authbtn{
+    background-color: #de1889;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    position: relative;
+    z-index: 1000;
+    overflow: hidden;
+}
+.authcontainer .authbtn::before{
+    content: " →";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    border-radius: 8px;
+    z-index: -1;
+    transform: translateX(-150px);
+    transition: transform .3s ease-in-out;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-right: 13px;
+    font-size: 18px;
+}
+.authcontainer .authbtn:hover::before{
+    transform: translateX(0px);
+    border: 0px;
+}
+
+.authcontainer .authbtn.hidden{
+    background-color: transparent;
+    border-color: #fff;
+}
+
+.authcontainer form{
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+}
+
+.authcontainer input{
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.form-container{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in{
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.authcontainer.active .sign-in{
+    transform: translateX(100%);
+}
+
+.sign-up{
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.authcontainer.active .sign-up{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+@keyframes move{
+    0%, 49.99%{
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100%{
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.social-icons{
+    margin: 20px 0;
+}
+
+.social-icons button{
+    border: 1px solid #ccc;
+    background: #de1889;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 30px;
+    display: inline-flex;
+    align-items: center;
+    gap:14px;
+    transition: all .3s ease-in-out;
+    i{
+        font-size: 25px;
+    }
+}
+.social-icons button:hover{
+    background-color: black;
+}
+
+.toggle-container{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 150px 0 0 100px;
+    z-index: 1000;
+}
+
+.authcontainer.active .toggle-container{
+    transform: translateX(-100%);
+    border-radius: 0 150px 100px 0;
+}
+
+.toggle{
+    background-color: #de1888b1;
+    height: 100%;
+    background: linear-gradient(to right, #cb066ffd, #de1889);
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.authcontainer.active .toggle{
+    transform: translateX(50%);
+}
+
+.toggle-panel{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left{
+    transform: translateX(-200%);
+}
+
+.authcontainer.active .toggle-left{
+    transform: translateX(0);
+}
+
+.toggle-right{
+    right: 0;
+    transform: translateX(0);
+}
+
+.authcontainer.active .toggle-right{
+    transform: translateX(200%);
+}
