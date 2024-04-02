@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../components/Header";
 import "../HowToUse/Howtouse.css"
+import Footer from '../../components/Footer';
 
 function HowToUse() {
     return (
@@ -77,7 +78,7 @@ function HowToUse() {
                 </div>
             </section>
 
-
+            <Footer />
         </>
     )
 }
