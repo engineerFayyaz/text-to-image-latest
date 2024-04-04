@@ -154,6 +154,41 @@ const ImageGenerator = () => {
     }
   };
 
+
+  useEffect(() => {
+    const disableRightClick = (e) => {
+      e.preventDefault();
+      toast.error("Right-clicking is disabled for this website.");
+    };
+
+    // Disable right-click context menu
+    window.addEventListener("contextmenu", disableRightClick);
+
+    return () => {
+      // Cleanup
+      window.removeEventListener("contextmenu", disableRightClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    const disableScreenshots = (e) => {
+      e.preventDefault();
+      toast.error("Screenshotting is disabled for this website.");
+    };
+
+    // Disable screenshotting
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "S")) {
+        // Ctrl + S
+        disableScreenshots(e);
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "c" || e.key === "C")) {
+        // Ctrl + C
+        disableScreenshots(e);
+      }
+    });
+});
+    
+
   return (
     <>
       <Header />
