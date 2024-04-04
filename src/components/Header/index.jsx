@@ -21,7 +21,7 @@ const Header = () => {
   return (
     <header className="header-main">
       <nav className="navbar navbar-expand-lg navbar-dark">
-        <div className="container-fluid justify-content-evenly">
+        <div className="container-fluid justify-content-between pe-1 pe-md-4">
           <Link to="/" className="navbar-brand">
             <img src="/images/newlogo.png" width={100} alt="Logo" />
           </Link>
@@ -40,31 +40,20 @@ const Header = () => {
             className="collapse navbar-collapse justify-content-around"
             id="navbarSupportedContent"
           >
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-5">
               <li className="nav-item">
-                <Link to="#" className="nav-link">
+                <Link to="/" className="nav-link">
                   Home
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  AI Image Generator
+                 Create
                 </Link>
               </li>
-
               <li className="nav-item">
                 <Link to="/How-to-use" className="nav-link">
-                  How to Use
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/Prompt-guide" className="nav-link">
-                  Prompt Guide
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="#" className="nav-link">
-                  AI Image Prompts
+                 Tutorial
                 </Link>
               </li>
             </ul>
@@ -77,7 +66,7 @@ const Header = () => {
                 aria-expanded="false"
               >
                 {/* {userData.name} */}
-                {userData.email}
+                {userData.email.split('@')[0]}
               </button>
               <ul className="dropdown-menu">
                 <li>

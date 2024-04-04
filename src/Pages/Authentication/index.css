@@ -55,7 +55,7 @@
 }
 
 .authcontainer .authbtn{
-    background-color: #de1889;
+    background-color: #663399;
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -169,7 +169,7 @@
 
 .social-icons button{
     border: 1px solid #ccc;
-    background: #de1889;
+    background: #663399;
     color: white;
     border-radius: 10px;
     font-weight: 600;
@@ -204,9 +204,9 @@
 }
 
 .toggle{
-    background-color: #de1888b1;
+    background-color: #663399;
     height: 100%;
-    background: linear-gradient(to right, #cb066ffd, #de1889);
+    background: linear-gradient(to right, #c3b1e1, #663399);
     color: #fff;
     position: relative;
     left: -100%;
@@ -246,6 +246,10 @@
 .toggle-right{
     right: 0;
     transform: translateX(0);
+
+    p{
+        line-height: 24px;
+    }
 }
 
 .authcontainer.active .toggle-right{

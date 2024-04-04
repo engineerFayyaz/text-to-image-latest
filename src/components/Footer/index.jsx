@@ -24,11 +24,7 @@ const Footer = () => {
                         <div className="col-md-3">
                             <div className="useful-link">
                                 <h2>Useful Links</h2>
-                                <img
-                                    src="./assets/images/about/home_line.png"
-                                    alt=""
-                                    className="img-fluid"
-                                />
+                               
                                 <div className="use-links">
                                     <li>
                                         <a href="index.html">
@@ -56,7 +52,6 @@ const Footer = () => {
                         <div className="col-md-3">
                             <div className="social-links">
                                 <h2>Follow Us</h2>
-                                <img src="/images/about/home_line.png" alt="" />
                                 <div className="social-icons">
                                     <li>
                                         <a href="">
@@ -79,11 +74,6 @@ const Footer = () => {
                         <div className="col-md-3">
                             <div className="address">
                                 <h2>Address</h2>
-                                <img
-                                    src="/images/about/home_line.png"
-                                    alt=""
-                                    className="img-fluid"
-                                />
                                 <div className="address-links">
                                     <li className="address1">
                                     <FontAwesomeIcon icon={faMapMarkerAlt}/> Kolathur ramankulam-
@@ -109,8 +99,7 @@ const Footer = () => {
             {/* footer copy right section start */}
             <section id="copy-right">
                 <div className="copy-right-sec">
-                    <i className="fa-solid fa-copyright" /> lorem ispum lorem ispum 2022
-                    Powerd By <a href="#">lorem ispum</a>
+                    <i className="fa-solid fa-copyright" /> 2024 by <a href="#">AI-Image Generator</a>
                 </div>
             </section>
         </>

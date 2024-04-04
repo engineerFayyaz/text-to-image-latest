@@ -42,15 +42,15 @@ const Authentication = () => {
           <div className="toggle">
             <div className="toggle-panel toggle-left">
               <h1>Welcome Back!</h1>
-              <p>Enter your personal details to use all of site features</p>
+              <p>Ai-Image Generator Let your Imagination work Here</p>
               <button className="hidden authbtn" id="login">
                 Sign In
               </button>
             </div>
             <div className="toggle-panel toggle-right">
-              <h1>Hello, Friend!</h1>
+              <h1>Welcome to AI-Image Generator!</h1>
               <p>
-                Register with your personal details to use all of site features
+                Register Now to convert your imagination into reality 
               </p>
               <button className="hidden authbtn" id="register">
                 Sign Up

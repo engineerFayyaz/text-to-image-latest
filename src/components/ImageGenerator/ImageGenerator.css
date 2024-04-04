@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+:root{
+  --color: #663399;
+  --bg-color: #c3b1e1;
+  --font-family: "Roboto Condensed", sans-serif;
+}
+.bg-grey-700{
+  background-color: #c3bebe;
+}
 .ai-image-generator {
   display: flex;
   flex-direction: column;
@@ -7,6 +23,90 @@
   margin-bottom: 20px;
   gap: 30px;
 }
+.image-generator :where(h1){
+  font-family: var(--font-family);
+  font-size: 2.2rem;
+  word-spacing: 4px;
+  color: var(--color);
+  text-transform: capitalize;
+  font-weight: 800;
+}
+.image-generator .card{
+  box-shadow: 1px 0px 4px 1px #c3bebe, inset 1px 1px 13px 1px #c3bebe;
+
+  .card-body h3{
+    font-weight: 600;
+    font-size: 1.8rem;
+    font-family: "Roboto Condensed", sans-serif;
+    color: var(--color);
+  }
+  .card-body h2{
+    font-weight: 600;
+    font-size: 2.2rem;
+    font-family: "Roboto Condensed", sans-serif;
+    color: var(--color);
+  }
+  .card-body button{
+    background-color: var(--color);
+    border: none;
+    padding: 8px 16px;
+  }
+  .card-body .form-check input{
+    border: 2px solid var(--bg-color);
+    cursor: pointer;
+  }
+  .form-check-input:checked{
+    background-color: var(--color);
+    border-color: var(--color);
+  }
+  .form-check-input:focus{
+    border-color: var(--color);
+  }
+  .card-body .user-input{
+    font-size: 16px;
+    font-weight: bold;
+    font-family: var(--font-family);
+    border: 2px solid #e4e1e1;
+  }
+  .card-body .user-input::placeholder{
+    color: #817979;
+  }
+  .card-body .user-input:focus{
+    box-shadow: none;
+  }
+}
+/* ImageGenerator.css */
+.image-generator .number-images:focus{
+  background-color: black !important;
+}
+.image-generator button{
+  transition: all .3s ease-in-out;
+}
+.image-generator button:hover{
+  background-color: black !important;
+}
+.input-range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+}
+
+.input-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  cursor: pointer;
+}
+
+.input-range::-webkit-slider-thumb:hover {
+  background: var(--bg-color);
+}
 
 .header {
   font-size: 70px;
@@ -15,7 +115,7 @@
 }
 
 .header span {
-  color: #de1889;
+  color: #c3b1e1;
   font-weight: 600;
 }
 
@@ -77,7 +177,7 @@
   height: 100%;
   font-size: 20px;
   border-radius: 50px;
-  background: #de1889;
+  background: #c3b1e1;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -85,6 +185,8 @@
   color: white;
   transition: background-color .3s ease-out;
 }
+
+
 .generate-btn:hover{
   background-color: black;
 }
@@ -92,22 +194,24 @@
 .loading-bar {
   width: 0px;
   height: 8px;
-  background: #de1889;
+  background: #c3b1e1;
   transition: width 1s linear;
 }
 
 .loading-bar-full {
   width: 100%;
   height: 8px;
-  background: #de1889;
+  background: #c3b1e1;
   transition: width 1s linear;
 }
 
 .loading-text {
   font-size: 18px;
-  color: #de1889;
+  color: #c3b1e1;
 }
-
+.image-generator .progress{
+  background: #d8d8d8;
+}
 @media only screen and (max-width: 600px) {
   .ai-image-generator {
     margin-top: 100px;
@@ -143,12 +247,29 @@
 }
 
 .aspect-ratio.selected {
-  background-color: #de1889;
+  background-color: #c3b1e1;
 }
 
 
 .image-generator.mt-20.row {
   margin-top: 111px;
 }
+.live-preview canvas{
+  width: 100% ;
+    height: 225px !important;
+}
 
-
+@media (max-width: 750px){
+  .live-preview canvas{
+    width: 100%;
+      height: 225px !important;
+  }
+  .image-generator :where(h1){
+    font-size: 1.8rem;
+  }
+}
+@media (max-width: 450px){
+  .image-generator :where(h1){
+    font-size: 1.3rem;
+  }
+}

@@ -5,12 +5,16 @@
   box-sizing: border-box;
   font-family: "Poppins";
 }
+:root{
+  --color: #663399;
+  --bg-color: #c3b1e1;
+}
 .header-main .navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background:#de1889;
+    background:var(--color);
     height: 80px;
     display: flex;
     align-items: center;
@@ -34,7 +38,7 @@
     }
   }
   .header-main .navbar .nav-item:hover{
-    background: #d4047a;
+    background: #c3b1e1;
   }
   .header-main .navbar .navbar-nav .nav-item .nav-link {
     color: #f3f3f3;
@@ -51,10 +55,10 @@
     text-decoration: none;
     font-family: "Poppins";
     transition: all 0.3s ease-in-out;
-    border: 2px solid white;
+    border: 2px solid var(--bg-color);
   }
   .header-main .navbar .navbar-text:hover, .btn.show {
-    background-color: #d4047a;
+    background-color: #c3b1e1;
   }
  .header-main .dropdown-menu{
   width: 100% !important;
@@ -72,7 +76,7 @@
   width: 90%;
  }
  .header-main .dropdown-menu .dropdown-item:hover{
-  border-left-color:#de1889;
+  border-left-color:#c3b1e1;
   transform: translateX(10px);
  }
  .header-main .login-text{
