@@ -34,10 +34,10 @@ const ImageGenerator = () => {
       toast.error("Please enter a description.");
       return;
     }
-
+  
     setLoading(true);
     setProgress(0);
-
+  
     try {
       const response = await fetch(
         "https://api.openai.com/v1/images/generations",
@@ -55,24 +55,30 @@ const ImageGenerator = () => {
           }),
         }
       );
-
+  
       if (response.ok) {
         const data = await response.json();
         const imageUrls = data.data.map((item) => item.url);
+        console.log("Generated Image URLs:", imageUrls);
         setOriginalImageUrl(imageUrls[0]);
-        setGeneratedImageUrls(imageUrls.slice(1));
+        setGeneratedImageUrls(imageUrls);
+
+        // setGeneratedImageUrls(imageUrls.slice(1)); // Update generated image URLs here
+        console.log("setGeneratedImageUrls", imageUrls.slice(1));
       } else {
         toast.error("Failed to fetch image data from the API");
       }
+      
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while fetching image data");
     }
-
+  
     setLoading(false);
     setProgress(100);
   };
-
+  
+  
   useEffect(() => {
     if (!loading) {
       setTimeout(() => {
@@ -86,7 +92,7 @@ const ImageGenerator = () => {
       drawImages();
     }
   }, [originalImageUrl, generatedImageUrls]);
-
+  
   const drawImages = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -94,17 +100,28 @@ const ImageGenerator = () => {
     // Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    const generatedImages = generatedImageUrls.map((url, index) => {
+    let imagesLoaded = 0; // Counter for loaded images
+
+    generatedImageUrls.forEach((url, index) => {
       const img = new Image();
       img.onload = () => {
         const x = (index % 2) * (canvas.width / 2);
         const y = Math.floor(index / 2) * (canvas.height / 2);
         context.drawImage(img, x, y, canvas.width / 2, canvas.height / 2);
+
+        // Increment the counter
+        imagesLoaded++;
+
+        // If all images are loaded, do something
+        if (imagesLoaded === generatedImageUrls.length) {
+          console.log("All images loaded!");
+          // You can do something here if needed
+        }
       };
       img.src = url;
-      return img;
     });
   };
+
 
   const handleInspirationTextChange = (text) => {
     setInspirationText(text);
@@ -135,9 +152,6 @@ const ImageGenerator = () => {
       setNumImages(value);
       numImagesRef.current = value;
     }
-
-   
-   
   };
 
   return (
@@ -162,7 +176,7 @@ const ImageGenerator = () => {
             </Card>
             <Card >
               <Card.Body className="d-flex flex-column gap-3">
-              <h3>Adjust</h3>
+                <h3>Adjust</h3>
                 <Form.Group>
                   <Form.Label>Color Saturation:</Form.Label>
                   <Form.Control
@@ -239,7 +253,7 @@ const ImageGenerator = () => {
               {/* Add this line */}
               {loading && <p className="pb-0">Please Wait...</p>}
               {/* Display the grid of images */}
-              <div className="image-grid bg-danger">
+              <div className="image-grid">
                 {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
                 {generatedImageUrls.slice(0, numImages).map((url, index) => (
                   <img
