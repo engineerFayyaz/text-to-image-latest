@@ -239,7 +239,7 @@ const ImageGenerator = () => {
               {/* Add this line */}
               {loading && <p className="pb-0">Please Wait...</p>}
               {/* Display the grid of images */}
-              <div className="image-grid bg-danger">
+              <div className="image-grid  " >
                 {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
                 {generatedImageUrls.slice(0, numImages).map((url, index) => (
                   <img

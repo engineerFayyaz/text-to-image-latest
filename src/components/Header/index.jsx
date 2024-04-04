@@ -3,8 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./header.css"; // Assuming you have a CSS file named Header.css
 import { getUserFromLocalStorage } from "../../Utils/localStorage";
+import {getAuth} from "firebase/auth"
 const Header = () => {
   const [userData, setUserData] = useState(null);
+  const auth = getAuth();
 
   useEffect(() => {
     // Fetch user data from local storage when the component mounts
@@ -59,7 +61,7 @@ const Header = () => {
             </ul>
           </div>
           {userData ? (
-            <div className="dropdown">
+            <div className="dropdown dropstart">
               <button
                 className="btn btn-outline-info navbar-text dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
@@ -68,7 +70,7 @@ const Header = () => {
                 {/* {userData.name} */}
                 {userData.email.split('@')[0]}
               </button>
-              <ul className="dropdown-menu">
+              <ul className="dropdown-menu  ">
                 <li>
                   <button className="dropdown-item" onClick={handleLogout}>
                     Logout

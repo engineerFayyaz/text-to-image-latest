@@ -26,7 +26,8 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
+        name
       );
       // Signed up successfully
       const user = userCredential.user;
@@ -72,6 +73,10 @@ const Register = () => {
       .then((result) => {
         const user = result.user;
         console.log("Google Sign-In Successful:", user);
+
+        // Store user data to local storage
+        storeUserToLocalStorage({ name: user.displayName, email: user.email });
+
         navigate("/");
       })
       .catch((error) => {
