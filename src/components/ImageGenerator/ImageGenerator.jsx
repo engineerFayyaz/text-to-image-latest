@@ -12,9 +12,12 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header";
-import {faCartShopping} from "@fortawesome/free-solid-svg-icons"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CartModal from "../Cart";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import {getFirestore, collection, addDoc} from "firebase/firestore"
 // import { FaShoppingCart } from 'react-icons/fa';
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
@@ -33,16 +36,41 @@ const ImageGenerator = () => {
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+      } else {      
+      }
+    });
+
+    // Clean up subscription on unmount
+    return () => unsubscribe();
+  }, [auth]);
 
   const imageGenerator = async () => {
+
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      toast.error("Please log in to generate images.");
+
+      setTimeout(() => {
+        navigate("/authentication")
+    },1000)
+      return;
+    
+    }
+    
     if (!inputRef.current || !inputRef.current.value) {
       toast.error("Please enter a description.");
       return;
     }
-  
+
     setLoading(true);
     setProgress(0);
-  
+
     try {
       const response = await fetch(
         "https://api.openai.com/v1/images/generations",
@@ -60,7 +88,7 @@ const ImageGenerator = () => {
           }),
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
         const imageUrls = data.data.map((item) => item.url);
@@ -68,25 +96,34 @@ const ImageGenerator = () => {
         setOriginalImageUrl(imageUrls[0]);
         setGeneratedImageUrls(imageUrls);
         setIsImageGenerated(true);
-        // setGeneratedImageUrls(imageUrls.slice(1)); // Update generated image URLs here
-        console.log("setGeneratedImageUrls", imageUrls.slice(1));
+        // console.log("setGeneratedImageUrls", imageUrls.slice(1));
+
+        const db = getFirestore();
+        const imageCollectionRef = collection(db, "images");
+        imageUrls.forEach(async (imageUrl) => {
+          try {
+            await addDoc(imageCollectionRef, { imageUrl });
+            toast.sucess("Image URL stored in Firestore:", imageUrl);
+          } catch (error) {
+            console.error("Error storing image URL in Firestore:", error);
+          }
+        });
       } else {
         toast.error("Failed to fetch image data from the API");
       }
-      
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while fetching image data");
     }
-  
+
     setLoading(false);
     setProgress(100);
   };
-  
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
-  
+
   const handleShowModal = () => {
     setShowModal(true);
   };
@@ -97,18 +134,17 @@ const ImageGenerator = () => {
       setCartItems([...cartItems, imageUrl]);
       handleShowModal(); // Show the modal after adding the item to the cart
     } else {
-      toast.info('Item is already in the cart.');
+      toast.info("Item is already in the cart.");
     }
   };
   const handleRemoveFromCart = (imageUrl) => {
-    const updatedCart = cartItems.filter(item => item !== imageUrl);
+    const updatedCart = cartItems.filter((item) => item !== imageUrl);
     setCartItems(updatedCart);
   };
   // const handleRemoveFromCart = (index) => {
   //   const updatedCart = cartItems.filter((item, i) => i !== index);
   //   setCartItems(updatedCart);
   // };
-  
 
   useEffect(() => {
     if (!loading) {
@@ -123,7 +159,7 @@ const ImageGenerator = () => {
       drawImages();
     }
   }, [originalImageUrl, generatedImageUrls]);
-  
+
   const drawImages = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -136,8 +172,8 @@ const ImageGenerator = () => {
     generatedImageUrls.forEach((url, index) => {
       const img = new Image();
       img.onload = () => {
-        const x = (index % 2) * (canvas.width);
-        const y = Math.floor(index / 2) * (canvas.height);
+        const x = (index % 2) * canvas.width;
+        const y = Math.floor(index / 2) * canvas.height;
         context.drawImage(img, x, y, canvas.width, canvas.height);
 
         // Increment the counter
@@ -152,8 +188,6 @@ const ImageGenerator = () => {
       img.src = url;
     });
   };
-  
-
 
   const handleInspirationTextChange = (text) => {
     setInspirationText(text);
@@ -186,7 +220,6 @@ const ImageGenerator = () => {
     }
   };
 
-
   useEffect(() => {
     const disableRightClick = (e) => {
       e.preventDefault();
@@ -218,28 +251,35 @@ const ImageGenerator = () => {
         disableScreenshots(e);
       }
     });
-});
-    
-useEffect(() => {
-  // Select all elements with data-bs-toggle="tooltip"
-  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-
-  // Convert NodeList to an array and map over it to create tooltips
-  const tooltipList = Array.from(tooltipTriggerList).map(tooltipTriggerEl => {
-    return new window.bootstrap.Tooltip(tooltipTriggerEl);
   });
 
-  // Cleanup function to destroy tooltips when component unmounts
-  return () => {
-    tooltipList.forEach(tooltip => {
-      tooltip.dispose();
-    });
-  };
-}, []); // Run only once when component mounts
+  useEffect(() => {
+    // Select all elements with data-bs-toggle="tooltip"
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+
+    // Convert NodeList to an array and map over it to create tooltips
+    const tooltipList = Array.from(tooltipTriggerList).map(
+      (tooltipTriggerEl) => {
+        return new window.bootstrap.Tooltip(tooltipTriggerEl);
+      }
+    );
+
+    // Cleanup function to destroy tooltips when component unmounts
+    return () => {
+      tooltipList.forEach((tooltip) => {
+        tooltip.dispose();
+      });
+    };
+  }, []); // Run only once when component mounts
 
   return (
     <>
-      <Header cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} />
+      <Header
+        cartItems={cartItems}
+        handleRemoveFromCart={handleRemoveFromCart}
+      />
       <ToastContainer />
       <Container fluid>
         <Row className="image-generator mt-20 p-3 gap-4 gap-md-0">
@@ -257,7 +297,7 @@ useEffect(() => {
                 </Button>
               </Card.Body>
             </Card>
-            <Card >
+            <Card>
               <Card.Body className="d-flex flex-column gap-3">
                 <h3>Adjust</h3>
                 <Form.Group>
@@ -331,94 +371,92 @@ useEffect(() => {
           </Col>
           <Col md={8}>
             <div className="live-preview text-center">
-              <h1 className="text-center">Convert Your Imagination into Reality with AI</h1>
+              <h1 className="text-center">
+                Convert Your Imagination into Reality with AI
+              </h1>
               <ProgressBar animated now={progress} label={`${progress}%`} />
               {/* Add this line */}
               {loading && <p className="pb-0">Please Wait...</p>}
               {/* Display the grid of images */}
               {isImageGenerated && (
-              <div className="image-grid">
-                {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
-                {generatedImageUrls.slice(0, numImages).map((url, index) => (
-                  <div key={index} className="image-container">
-                  <img
-                    src={url}
-                    alt={`Generated ${index + 1}`}
-                    className="generated-image rounded-5"
-                  />
-                  <span>
-                  <Button
-                    title="Add to Cart"
-                    data-bs-toggle="tooltip"
-                    onClick={() => handleAddToCart(url)} // Pass the image URL to handleAddToCart
-                  >
-                    <FontAwesomeIcon icon={faCartShopping} />
-                  </Button>
-                  </span>
+                <div className="image-grid">
+                  {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
+                  {generatedImageUrls.slice(0, numImages).map((url, index) => (
+                    <div key={index} className="image-container">
+                      <img
+                        src={url}
+                        alt={`Generated ${index + 1}`}
+                        className="generated-image rounded-5"
+                      />
+                      <span>
+                        <Button
+                          title="Add to Cart"
+                          data-bs-toggle="tooltip"
+                          onClick={() => handleAddToCart(url)} // Pass the image URL to handleAddToCart
+                        >
+                          <FontAwesomeIcon icon={faCartShopping} />
+                        </Button>
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                  
-                ))}
-                
-              </div>
-            )}
-              
+              )}
+
               {/* Use canvas to edit images */}
-              <canvas ref={canvasRef} className="bg-grey-700  rounded-4 mt-4"  />
+              <canvas ref={canvasRef} className="bg-grey-700  rounded-4 mt-4" />
             </div>
             <div className="generate-boxs d-flex align-items-center flex-column justify-content-center  ">
-            <Card className="mt-2 w-100 w-md-50 shadow-none border-0 text-center">
-              <Card.Body>
-                <h2>Choose Your Style</h2>
-                <Form.Group className="d-flex align-items-center justify-content-center gap-4">
-                  <Form.Check
-                    type="radio"
-                    label="Portrait"
-                    name="posterSize"
-                    checked={posterSize === "Portrait"}
-                    onChange={() => handlePosterSizeChange("Portrait")}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Landscape"
-                    name="posterSize"
-                    checked={posterSize === "Landscape"}
-                    onChange={() => handlePosterSizeChange("Landscape")}
-                  />
-                </Form.Group>
-              </Card.Body>
-            </Card>
-            <Card className="mt-2 w-100">
-              <Card.Body>
-                {/* <h3>Inspiration Text</h3> */}
-                <Form.Group className="d-flex">
-                  <Form.Control
-                    type="text"
-                    ref={inputRef}
-                    value={inspirationText}
-                    placeholder="Let Your Imagination Work Here...."
-                    onChange={(e) =>
-                      handleInspirationTextChange(e.target.value)
-                    }
-                    className="user-input"
-                  />
-                   <Button
-                  onClick={imageGenerator}
-                  variant="primary"
-                >
-                  Generate
-                </Button>
-                </Form.Group>
-              </Card.Body>
-            </Card>
+              <Card className="mt-2 w-100 w-md-50 shadow-none border-0 text-center">
+                <Card.Body>
+                  <h2>Choose Your Style</h2>
+                  <Form.Group className="d-flex align-items-center justify-content-center gap-4">
+                    <Form.Check
+                      type="radio"
+                      label="Portrait"
+                      name="posterSize"
+                      checked={posterSize === "Portrait"}
+                      onChange={() => handlePosterSizeChange("Portrait")}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Landscape"
+                      name="posterSize"
+                      checked={posterSize === "Landscape"}
+                      onChange={() => handlePosterSizeChange("Landscape")}
+                    />
+                  </Form.Group>
+                </Card.Body>
+              </Card>
+              <Card className="mt-2 w-100">
+                <Card.Body>
+                  {/* <h3>Inspiration Text</h3> */}
+                  <Form.Group className="d-flex">
+                    <Form.Control
+                      type="text"
+                      ref={inputRef}
+                      value={inspirationText}
+                      placeholder="Let Your Imagination Work Here...."
+                      onChange={(e) =>
+                        handleInspirationTextChange(e.target.value)
+                      }
+                      className="user-input"
+                    />
+                    <Button onClick={imageGenerator} variant="primary">
+                      Generate
+                    </Button>
+                  </Form.Group>
+                </Card.Body>
+              </Card>
             </div>
           </Col>
         </Row>
       </Container>
-  <CartModal show={showModal}
-   handleClose={handleCloseModal} 
-   cartItems={cartItems}
-   handleRemoveFromCart={handleRemoveFromCart}
-   />
+      <CartModal
+        show={showModal}
+        handleClose={handleCloseModal}
+        cartItems={cartItems}
+        handleRemoveFromCart={handleRemoveFromCart}
+      />
 
       {/* {showModal && (
         <div className="modal">

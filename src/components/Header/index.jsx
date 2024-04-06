@@ -7,6 +7,7 @@ import { getAuth } from "firebase/auth";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {ToastContainer, toast} from "react-toastify"
 import CartModal from "../Cart";
 const Header = ({ cartItems, handleRemoveFromCart }) => {
   console.log("Props in Header:", cartItems, handleRemoveFromCart);
@@ -23,8 +24,10 @@ const Header = ({ cartItems, handleRemoveFromCart }) => {
 
   const handleLogout = () => {
     // Remove user data from local storage
+    auth.signOut();
     localStorage.removeItem("user");
     // Redirect to login page
+    toast.success("user logout successfully");
     window.location.reload(); // Reload the page to reflect logout
   };
 
@@ -45,7 +48,9 @@ const Header = ({ cartItems, handleRemoveFromCart }) => {
   };
   
   return (
+    <>
     <header className="header-main">
+    <ToastContainer />
       <nav className="navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid justify-content-between">
           <Link to="/" className="navbar-brand">
@@ -126,6 +131,7 @@ const Header = ({ cartItems, handleRemoveFromCart }) => {
       handleRemoveFromCart={handleRemoveItemFromCart}
       />}
     </header>
+    </>
   );
 };
 
