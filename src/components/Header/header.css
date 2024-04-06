@@ -49,8 +49,19 @@
   .header-main .navbar .nav-item:hover .nav-link{
     color: white;
   }
-
-
+  .header-main .navbar .navbar-text:hover, .btn.show{
+    background: transparent !important;
+  }
+  .header-main .navbar .navbar-text button svg{
+    transition: all .3s ease-in-out;
+    font-size: 20px;
+    margin-top: 5px;
+    padding-right: 5px;
+  }
+  .header-main .navbar .navbar-text button:hover svg{
+    color: var(--bg-color) !important;
+    transform: translateY(-10px);
+  }
   .header-main .navbar .navbar-text {
     text-decoration: none;
     font-family: "Poppins";

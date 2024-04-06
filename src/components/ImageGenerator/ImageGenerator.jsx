@@ -12,7 +12,10 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header";
-
+import {faCartShopping} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import CartModal from "../Cart";
+// import { FaShoppingCart } from 'react-icons/fa';
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
   const [generatedImageUrls, setGeneratedImageUrls] = useState([]);
@@ -24,10 +27,12 @@ const ImageGenerator = () => {
   const [contrast, setContrast] = useState(0);
   const [posterSize, setPosterSize] = useState("A4");
   const [numImages, setNumImages] = useState(1);
-
+  const [isImageGenerated, setIsImageGenerated] = useState(false);
   const inputRef = useRef(null);
   const numImagesRef = useRef(null);
   const canvasRef = useRef(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const imageGenerator = async () => {
     if (!inputRef.current || !inputRef.current.value) {
@@ -62,7 +67,7 @@ const ImageGenerator = () => {
         console.log("Generated Image URLs:", imageUrls);
         setOriginalImageUrl(imageUrls[0]);
         setGeneratedImageUrls(imageUrls);
-
+        setIsImageGenerated(true);
         // setGeneratedImageUrls(imageUrls.slice(1)); // Update generated image URLs here
         console.log("setGeneratedImageUrls", imageUrls.slice(1));
       } else {
@@ -78,7 +83,33 @@ const ImageGenerator = () => {
     setProgress(100);
   };
   
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleAddToCart = (imageUrl) => {
+    if (!cartItems.includes(imageUrl)) {
+      console.log("Image URL fetched successfully:", imageUrl);
+      setCartItems([...cartItems, imageUrl]);
+      handleShowModal(); // Show the modal after adding the item to the cart
+    } else {
+      toast.info('Item is already in the cart.');
+    }
+  };
+  const handleRemoveFromCart = (imageUrl) => {
+    const updatedCart = cartItems.filter(item => item !== imageUrl);
+    setCartItems(updatedCart);
+  };
+  // const handleRemoveFromCart = (index) => {
+  //   const updatedCart = cartItems.filter((item, i) => i !== index);
+  //   setCartItems(updatedCart);
+  // };
+  
+
   useEffect(() => {
     if (!loading) {
       setTimeout(() => {
@@ -105,9 +136,9 @@ const ImageGenerator = () => {
     generatedImageUrls.forEach((url, index) => {
       const img = new Image();
       img.onload = () => {
-        const x = (index % 2) * (canvas.width / 2);
-        const y = Math.floor(index / 2) * (canvas.height / 2);
-        context.drawImage(img, x, y, canvas.width / 2, canvas.height / 2);
+        const x = (index % 2) * (canvas.width);
+        const y = Math.floor(index / 2) * (canvas.height);
+        context.drawImage(img, x, y, canvas.width, canvas.height);
 
         // Increment the counter
         imagesLoaded++;
@@ -121,6 +152,7 @@ const ImageGenerator = () => {
       img.src = url;
     });
   };
+  
 
 
   const handleInspirationTextChange = (text) => {
@@ -188,10 +220,26 @@ const ImageGenerator = () => {
     });
 });
     
+useEffect(() => {
+  // Select all elements with data-bs-toggle="tooltip"
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+  // Convert NodeList to an array and map over it to create tooltips
+  const tooltipList = Array.from(tooltipTriggerList).map(tooltipTriggerEl => {
+    return new window.bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  // Cleanup function to destroy tooltips when component unmounts
+  return () => {
+    tooltipList.forEach(tooltip => {
+      tooltip.dispose();
+    });
+  };
+}, []); // Run only once when component mounts
 
   return (
     <>
-      <Header />
+      <Header cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} />
       <ToastContainer />
       <Container fluid>
         <Row className="image-generator mt-20 p-3 gap-4 gap-md-0">
@@ -288,19 +336,34 @@ const ImageGenerator = () => {
               {/* Add this line */}
               {loading && <p className="pb-0">Please Wait...</p>}
               {/* Display the grid of images */}
+              {isImageGenerated && (
               <div className="image-grid">
                 {/* <img src={originalImageUrl} alt="Original" className="original-image" /> */}
                 {generatedImageUrls.slice(0, numImages).map((url, index) => (
+                  <div key={index} className="image-container">
                   <img
-                    key={index}
                     src={url}
                     alt={`Generated ${index + 1}`}
-                    className="generated-image"
+                    className="generated-image rounded-5"
                   />
+                  <span>
+                  <Button
+                    title="Add to Cart"
+                    data-bs-toggle="tooltip"
+                    onClick={() => handleAddToCart(url)} // Pass the image URL to handleAddToCart
+                  >
+                    <FontAwesomeIcon icon={faCartShopping} />
+                  </Button>
+                  </span>
+                </div>
+                  
                 ))}
+                
               </div>
+            )}
+              
               {/* Use canvas to edit images */}
-              <canvas ref={canvasRef} className="bg-grey-700 mt-4  rounded-4"  />
+              <canvas ref={canvasRef} className="bg-grey-700  rounded-4 mt-4"  />
             </div>
             <div className="generate-boxs d-flex align-items-center flex-column justify-content-center  ">
             <Card className="mt-2 w-100 w-md-50 shadow-none border-0 text-center">
@@ -351,6 +414,27 @@ const ImageGenerator = () => {
           </Col>
         </Row>
       </Container>
+  <CartModal show={showModal}
+   handleClose={handleCloseModal} 
+   cartItems={cartItems}
+   handleRemoveFromCart={handleRemoveFromCart}
+   />
+
+      {/* {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={handleCloseModal}>
+              &times;
+            </span>
+            <h2>Items in Cart</h2>
+            <div className="cart-items">
+              {cartItems.map((item, index) => (
+                <img key={index} src={item} alt={`Item ${index + 1}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )} */}
     </>
   );
 };

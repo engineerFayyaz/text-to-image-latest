@@ -3,10 +3,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./header.css"; // Assuming you have a CSS file named Header.css
 import { getUserFromLocalStorage } from "../../Utils/localStorage";
-import {getAuth} from "firebase/auth"
-const Header = () => {
+import { getAuth } from "firebase/auth";
+import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import CartModal from "../Cart";
+const Header = ({ cartItems, handleRemoveFromCart }) => {
+  console.log("Props in Header:", cartItems, handleRemoveFromCart);
   const [userData, setUserData] = useState(null);
   const auth = getAuth();
+  const [showCart, setShowCart] = useState(false);
+  const [CartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     // Fetch user data from local storage when the component mounts
@@ -20,10 +27,27 @@ const Header = () => {
     // Redirect to login page
     window.location.reload(); // Reload the page to reflect logout
   };
+
+  const handleToggleCart = () => {
+    setShowCart(!showCart);
+  };
+  // const handleRemoveItemFromCart = (itemToRemove) => {
+  //   const updatedCart = cartItems.filter((item) => item !== itemToRemove);
+  //   handleRemoveFromCart(updatedCart); // Invoke handleRemoveFromCart from props
+ 
+  // };
+  const handleRemoveItemFromCart = (itemToRemove) => {
+    const index = cartItems.indexOf(itemToRemove);
+    if (index !== -1) {
+      cartItems.splice(index, 1);
+      setCartItems([...cartItems]); // Trigger state update by creating a new array reference
+    }
+  };
+  
   return (
     <header className="header-main">
       <nav className="navbar navbar-expand-lg navbar-dark">
-        <div className="container-fluid justify-content-between pe-1 pe-md-4">
+        <div className="container-fluid justify-content-between">
           <Link to="/" className="navbar-brand">
             <img src="/images/newlogo.png" width={100} alt="Logo" />
           </Link>
@@ -50,41 +74,57 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                 Create
+                  Create
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/How-to-use" className="nav-link">
-                 Tutorial
+                  Tutorial
                 </Link>
               </li>
             </ul>
           </div>
-          {userData ? (
-            <div className="dropdown dropstart">
-              <button
-                className="btn btn-outline-info navbar-text dropdown-toggle text-light"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {/* {userData.name} */}
-                {userData.email.split('@')[0]}
-              </button>
-              <ul className="dropdown-menu  ">
-                <li>
-                  <button className="dropdown-item" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            <Link to="/authentication" className="nav-link login-text text-light">
-              Login
-            </Link>
-          )}
+          <div className="navbar-text border-0 d-flex align-items-center ">
+          <Button onClick={handleToggleCart} className="bg-transparent border-0 " >
+           <FontAwesomeIcon icon={faCartShopping} />
+           </Button>
+            {userData ? (
+              <div className="dropdown dropstart">
+                <button
+                  className="btn btn-outline-info navbar-text dropdown-toggle text-light"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {/* {userData.name} */}
+                  {userData.email.split("@")[0]}
+                </button>
+                <ul className="dropdown-menu  ">
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <div className="d-flex gap-3">
+                <Link
+                  to="/authentication"
+                  className="nav-link login-text text-light"
+                >
+                  Login
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
+      {showCart && <CartModal 
+      show={showCart} 
+      handleClose={handleToggleCart} 
+      cartItems={cartItems}
+      handleRemoveFromCart={handleRemoveItemFromCart}
+      />}
     </header>
   );
 };

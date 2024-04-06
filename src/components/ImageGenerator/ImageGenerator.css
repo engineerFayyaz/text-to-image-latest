@@ -85,6 +85,10 @@
 }
 .image-generator button:hover{
   background-color: black !important;
+  border-color: transparent ;
+}
+.image-generator button:hover i{
+  color: white;
 }
 .input-range {
   -webkit-appearance: none;
@@ -130,9 +134,27 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* gap: 20px; */
+ 
 }
-
+.image-grid {
+span{
+  height: fit-content;
+    position: relative;
+    bottom: 9rem;
+    right: 4rem;
+}
+button{
+  background-color: var(--color);
+  border: 2px solid #d8d8d8;
+  border-radius: 30px 60px 40px 180px;
+}
+}
+.image-grid span button a{
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+  transition: all .3s ease-in-out;
+}
 .image-grid img {
   width: calc(50% - 10px);
   margin: 5px;
@@ -255,9 +277,17 @@
 .image-generator.mt-20.row {
   margin-top: 111px;
 }
+.live-preview .image-grid{
+  background: linear-gradient(to right, #561f8d, #000000e9 0%, #663399 50%) ;
+  background-blend-mode: multiply;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px 0px;
+}
 .live-preview canvas{
   width: 100% ;
     height: 225px !important;
+    object-fit: none;
 }
 
 @media (max-width: 750px){
