@@ -156,9 +156,9 @@ button{
   transition: all .3s ease-in-out;
 }
 .image-grid img {
-  width: calc(50% - 10px);
+  /* width: calc(50% - 10px); */
   margin: 5px;
-  max-width: 100%;
+  max-width: 350px;
   height: auto;
 }
 
@@ -277,7 +277,7 @@ button{
 .image-generator.mt-20.row {
   margin-top: 111px;
 }
-.live-preview .image-grid{
+/* .live-preview .image-grid{
   background: linear-gradient(to right, #561f8d, #000000e9 0%, #663399 50%) ;
   background-blend-mode: multiply;
   border-radius: 20px;
@@ -288,7 +288,7 @@ button{
   width: 100% ;
     height: 225px !important;
     object-fit: none;
-}
+} */
 
 @media (max-width: 750px){
   .live-preview canvas{
@@ -304,3 +304,23 @@ button{
     font-size: 1.3rem;
   }
 }
+
+
+
+
+/* Landscape frame */
+.landscape-frame {
+  width: 100%;
+  height: auto;
+  max-width: 500px; /* Adjust max-width as needed */
+  max-height: 300px; /* Adjust max-height as needed */
+}
+
+/* Portrait frame */
+.portrait-frame {
+  width: auto;
+  height: 100%;
+  max-width: 300px; /* Adjust max-width as needed */
+  max-height: 500px; /* Adjust max-height as needed */
+}
+
