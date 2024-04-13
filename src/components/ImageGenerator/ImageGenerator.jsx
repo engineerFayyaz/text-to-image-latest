@@ -282,97 +282,11 @@ const ImageGenerator = () => {
       />
       <ToastContainer />
       <Container fluid>
-        <Row className="image-generator mt-20 p-3 gap-4 gap-md-0">
-          <Col md={4} className="d-flex flex-column gap-4 mt-5">
-            <Card className="">
-              <Card.Body>
-                <h3>Number of Images</h3>
-                <Button
-                  onClick={() => handleNumImagesChange(1)}
-                  variant={numImages === 1 ? "primary" : "light"}
-                  className="number-images"
-                  id="num-images"
-                >
-                  1
-                </Button>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body className="d-flex flex-column gap-3">
-                <h3>Adjust</h3>
-                <Form.Group>
-                  <Form.Label>Color Saturation:</Form.Label>
-                  <Form.Control
-                    className="input-range  "
-                    type="range"
-                    min="-100"
-                    max="100"
-                    value={colorSaturation}
-                    onChange={(e) =>
-                      handleColorSaturationChange(parseInt(e.target.value))
-                    }
-                    style={{
-                      background:
-                        colorSaturation > 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 ${colorSaturation}%, #d3d3d3 ${colorSaturation}%, #d3d3d3 100%)`
-                          : colorSaturation === 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 0, #d3d3d3 0, #d3d3d3 100%)`
-                          : `linear-gradient(to right, #d3d3d3 50%, #d3d3d3 100%)`,
-                    }}
-                  />
-                  <output className="output-box">{colorSaturation}</output>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>Brightness:</Form.Label>
-                  <Form.Control
-                    className="input-range"
-                    type="range"
-                    min="-100"
-                    max="100"
-                    value={brightness}
-                    onChange={(e) =>
-                      handleBrightnessChange(parseInt(e.target.value))
-                    }
-                    style={{
-                      background:
-                        brightness > 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 ${brightness}%, #d3d3d3 ${brightness}%, #d3d3d3 100%)`
-                          : brightness === 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 0, #d3d3d3 0, #d3d3d3 100%)`
-                          : `linear-gradient(to right, #d3d3d3 50%, #d3d3d3 100%)`,
-                    }}
-                  />
-                  <output>{brightness}</output>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>Contrast:</Form.Label>
-                  <Form.Control
-                    className="input-range"
-                    type="range"
-                    min="-100"
-                    max="100"
-                    value={contrast}
-                    onChange={(e) =>
-                      handleContrastChange(parseInt(e.target.value))
-                    }
-                    style={{
-                      background:
-                        contrast > 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 ${contrast}%, #d3d3d3 ${contrast}%, #d3d3d3 100%)`
-                          : contrast === 0
-                          ? `linear-gradient(to right, #c3b1e1 50%, #c3b1e1 0, #d3d3d3 0, #d3d3d3 100%)`
-                          : `linear-gradient(to right, #d3d3d3 50%, #d3d3d3 100%)`,
-                    }}
-                  />
-                  <output>{contrast}</output>
-                </Form.Group>
-              </Card.Body>
-            </Card>
-          </Col>
+        <Row className="image-generator mt-20 p-3 gap-4 gap-md-0 align-items-center justify-content-center  ">
           <Col md={8}>
             <div className="live-preview text-center">
               <h1 className="text-center">
-                Convert Your Imagination into Reality with AI
+                {/* Convert Your Imagination into Reality with AI */}
               </h1>
               <ProgressBar animated now={progress} label={`${progress}%`} />
               {/* Add this line */}
