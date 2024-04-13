@@ -14,10 +14,10 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  background: url(../../../public/images/bg5.png);
-  background-color:  rgba(0, 0, 0, 0.721);
-  background-blend-mode: multiply;
-  background-position: left ;
+  background-image: url(../../../public/images/registerbg.jpg);
+  background-position: left center; 
+  background-size: 65% 100%;
+  /* background-repeat: ; */
 
 }
 
