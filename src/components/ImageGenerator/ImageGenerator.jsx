@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+// import { IconContext } from "react-icons";
 import { IconContext } from "react-icons";
 import { AiOutlineCheck } from "react-icons/ai";
 import CartModal from "../Cart";
@@ -65,19 +66,23 @@ const ImageGenerator = () => {
     setProgress(0);
 
     try {
-      const response = await fetch("https://api.openai.com/v1/images/generations", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer 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",
-          "User-Agent": "Chrome",
-        },
-        body: JSON.stringify({
-          prompt: inputRef.current.value,
-          n: numImages,
-          style: selectedStyle,
-        }),
-      });
+      const response = await fetch(
+        "https://api.openai.com/v1/images/generations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer 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",
+            "User-Agent": "Chrome",
+          },
+          body: JSON.stringify({
+            prompt: inputRef.current.value,
+            n: numImages,
+            style: selectedStyle,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -92,7 +97,7 @@ const ImageGenerator = () => {
         imageUrls.forEach(async (imageUrl) => {
           try {
             await addDoc(imageCollectionRef, { imageUrl });
-            toast.success("Image URL stored in Firestore: " + imageUrl);
+            // toast.success("Image URL stored in Firestore: " + imageUrl);
           } catch (error) {
             console.error("Error storing image URL in Firestore:", error);
           }
@@ -175,7 +180,6 @@ const ImageGenerator = () => {
     });
   };
 
-
   useEffect(() => {
     if (originalImageUrl && generatedImageUrls.length > 0) {
       drawImages();
@@ -185,7 +189,10 @@ const ImageGenerator = () => {
   return (
     <>
       {/* Header component */}
-      <Header cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} />
+      <Header
+        cartItems={cartItems}
+        handleRemoveFromCart={handleRemoveFromCart}
+      />
       <ToastContainer />
       <Container fluid>
         <Row className="image-generator mt-20 p-3 gap-4 gap-md-0 align-items-center justify-content-center">
@@ -197,7 +204,7 @@ const ImageGenerator = () => {
               <ProgressBar animated now={progress} label={`${progress}%`} />
               {loading && <p className="pb-0">Please Wait...</p>}
               {isImageGenerated && (
-                <div className="image-grid">
+                <div className="image-grid p-4 d-flex flex-column">
                   {generatedImageUrls.slice(0, numImages).map((url, index) => (
                     <div key={index} className="image-container">
                       <img
@@ -215,43 +222,52 @@ const ImageGenerator = () => {
                       </span>
                     </div>
                   ))}
+              <canvas ref={canvasRef} className=" rounded-4 mt-4 canvas d-none" />
                 </div>
               )}
-              <canvas ref={canvasRef} className="bg-grey-700 rounded-4 mt-4" />
             </div>
-            <Form.Group className="d-flex justify-content-between align-items-center">
-              <Form.Check
-                type="radio"
-                label="Portrait"
-                name="posterSize"
-                value="portrait"
-                checked={posterSize === "portrait"}
-                onChange={() => setPosterSize("portrait")}
-              />
-              <Form.Check
-                type="radio"
-                label="Landscape"
-                name="posterSize"
-                value="landscape"
-                checked={posterSize === "landscape"}
-                onChange={() => setPosterSize("landscape")}
-              />
+            <Form.Group className="d-flex justify-content-between align-items-center mt-2">
+              <Card className="mt-2 w-100 w-md-50 text-center">
+                <Card.Body>
+                  <Form.Group className="d-flex align-items-center justify-content-evenly gap-4">
+                <h3 className="mb-0">Choose the Pattern</h3>
+                    <Form.Check
+                      type="radio"
+                      label="Portrait"
+                      name="posterSize"
+                      value="portrait"
+                      checked={posterSize === "portrait"}
+                      onChange={() => setPosterSize("portrait")}
+                      className="portrait"
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Landscape"
+                      name="posterSize"
+                      value="landscape"
+                      checked={posterSize === "landscape"}
+                      onChange={() => setPosterSize("landscape")}
+                      className="landscape"
+                    />
+                  </Form.Group>
+                </Card.Body>
+              </Card>
             </Form.Group>
-
 
             <div className="generate-boxs d-flex align-items-center flex-column justify-content-center">
               <Card className="mt-2 w-100 w-md-50 shadow-none border-0 text-center">
                 <Card.Body>
                   <h2>Choose Your Style</h2>
                   <Form.Group className="d-flex align-items-center justify-content-center gap-4">
-                    <IconContext.Provider value={{ size: "2rem", style: { verticalAlign: "middle" } }}>x
+                    <IconContext.Provider
+                      value={{
+                        size: "2rem",
+                        style: { verticalAlign: "middle" },
+                      }}
+                    >
                       <Form.Check
                         type="radio"
-                        label={
-                          <div>
-                            <AiOutlineCheck /> Vivid
-                          </div>
-                        }
+                        label={<div>Vivid</div>}
                         name="style"
                         value="vivid"
                         checked={selectedStyle === "vivid"}
@@ -259,11 +275,7 @@ const ImageGenerator = () => {
                       />
                       <Form.Check
                         type="radio"
-                        label={
-                          <div>
-                            <AiOutlineCheck /> Natural
-                          </div>
-                        }
+                        label={<div>Natural</div>}
                         name="style"
                         value="natural"
                         checked={selectedStyle === "natural"}
@@ -271,11 +283,7 @@ const ImageGenerator = () => {
                       />
                       <Form.Check
                         type="radio"
-                        label={
-                          <div>
-                            <AiOutlineCheck /> Anime
-                          </div>
-                        }
+                        label={<div>Anime</div>}
                         name="style"
                         value="vivid" // Default to 'vivid' for unsupported styles
                         checked={selectedStyle === "vivid"}
@@ -283,11 +291,7 @@ const ImageGenerator = () => {
                       />
                       <Form.Check
                         type="radio"
-                        label={
-                          <div>
-                            <AiOutlineCheck /> Realistic
-                          </div>
-                        }
+                        label={<div>Realistic</div>}
                         name="style"
                         value="vivid" // Default to 'vivid' for unsupported styles
                         checked={selectedStyle === "vivid"}
@@ -295,17 +299,12 @@ const ImageGenerator = () => {
                       />
                       <Form.Check
                         type="radio"
-                        label={
-                          <div>
-                            <AiOutlineCheck /> Cyberpunk
-                          </div>
-                        }
+                        label={<div>Cyberpunk</div>}
                         name="style"
                         value="vivid" // Default to 'vivid' for unsupported styles
                         checked={selectedStyle === "vivid"}
                         onChange={(e) => setSelectedStyle(e.target.value)}
                       />
-
                     </IconContext.Provider>
                   </Form.Group>
                 </Card.Body>

@@ -41,6 +41,7 @@
     font-family: "Roboto Condensed", sans-serif;
     color: var(--color);
   }
+
   .card-body h2{
     font-weight: 600;
     font-size: 2.2rem;
@@ -214,6 +215,10 @@ button{
   background-color: black;
 }
 
+input[type="radio"]{
+  border: 2px solid #817979;
+  cursor: pointer;
+}
 .loading-bar {
   width: 0px;
   height: 8px;
@@ -283,15 +288,17 @@ button{
   border-radius: 20px;
   padding: 20px;
   margin: 20px 0px;
-}
+} */
 .live-preview canvas{
-  background: url(/public/images/registerbg1.jpg);
-  background-size: cover;
+  /* background: url(/public/images/registerbg1.jpg); */
+  /* background-size: cover;   */
+  /* border: 2px solid black; */
   width: 100% ;
   background-position: bottom;
     height: 350px !important;
     object-fit: none;
-} */
+    text-align: center;
+} 
 
 @media (max-width: 750px){
   .live-preview canvas{
