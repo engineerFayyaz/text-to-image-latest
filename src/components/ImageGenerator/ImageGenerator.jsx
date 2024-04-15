@@ -254,7 +254,7 @@ const ImageGenerator = () => {
               </Card>
             </Form.Group>
 
-            <div className="generate-boxs d-flex align-items-center flex-column justify-content-center">
+            <div className="generate-boxs d-flex align-items-center flex-column justify-content-center mb-5">
               <Card className="mt-2 w-100 w-md-50 shadow-none border-0 text-center">
                 <Card.Body>
                   <h2>Choose Your Style</h2>
