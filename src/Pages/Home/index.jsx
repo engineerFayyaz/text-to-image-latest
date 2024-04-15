@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import ImageGenerator from "../../components/ImageGenerator/ImageGenerator";
 import HomeImages from "../../components/HomeImages";
 import Footer from "../../components/Footer";
+import TrustedUser from "../../components/TrustedUser";
 
 function Home() {
     return (
@@ -10,6 +11,7 @@ function Home() {
             <Header />
             <ImageGenerator />
             <HomeImages/>
+            <TrustedUser/>
             <Footer/>
         </>
     )

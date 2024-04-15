@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook,faLinkedin ,faInstagram  } from '@fortawesome/free-brands-svg-icons';
@@ -13,13 +14,13 @@ const Footer = () => {
                 <div className="container">
                     <div className="row ">
                         <div className="col-md-3 logo">
-                            <a href="index.html">
+                            <Link to="index.html">
                                 <img
                                     src="/images/logo-3.png"
                                     alt=""
                                     className="img-fluid logo-footer"
                                 />
-                            </a>
+                            </Link>
                         </div>
                         <div className="col-md-3">
                             <div className="useful-link">
@@ -27,24 +28,24 @@ const Footer = () => {
                                
                                 <div className="use-links">
                                     <li>
-                                        <a href="index.html">
+                                        <Link to="/">
                                         <FontAwesomeIcon icon={faAngleRight } /> Home
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="about.html">
+                                        <Link to="/About-us">
                                         <FontAwesomeIcon icon={faAngleRight } /> About Us
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="gallery.html">
+                                        <Link to="gallery.html">
                                         <FontAwesomeIcon icon={faAngleRight } /> Gallery
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="contact.html">
+                                        <Link to="/Contact-us">
                                         <FontAwesomeIcon icon={faAngleRight } /> Contact
-                                        </a>
+                                        </Link>
                                     </li>
                                 </div>
                             </div>
@@ -54,19 +55,19 @@ const Footer = () => {
                                 <h2>Follow Us</h2>
                                 <div className="social-icons">
                                     <li>
-                                        <a href="">
+                                        <Link to="">
                                         <FontAwesomeIcon icon={faFacebook} /> Facebook
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="">
                                             <FontAwesomeIcon icon={faInstagram}/> Instagram
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="">
                                             <FontAwesomeIcon icon={faLinkedin}/> Linkedin
-                                        </a>
+                                        </Link>
                                     </li>
                                 </div>
                             </div>
@@ -80,14 +81,14 @@ const Footer = () => {
                                         Malappuram Dt Kerala 679338
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="">
                                            <FontAwesomeIcon icon={faPhone }/> +91 90904500112
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="">
                                            <FontAwesomeIcon icon={faEnvelope}/> mail@1234567.com
-                                        </a>
+                                        </Link>
                                     </li>
                                 </div>
                             </div>
@@ -99,7 +100,7 @@ const Footer = () => {
             {/* footer copy right section start */}
             <section id="copy-right">
                 <div className="copy-right-sec">
-                    <i className="fa-solid fa-copyright" /> 2024 by <a href="#">AI-Image Generator</a>
+                    <i className="fa-solid fa-copyright" /> 2024 by <Link to="#">AI-Image Generator</Link>
                 </div>
             </section>
         </>
