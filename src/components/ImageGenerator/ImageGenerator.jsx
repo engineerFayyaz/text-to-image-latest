@@ -8,19 +8,17 @@ import {
   Button,
   Card,
   ProgressBar,
+  Modal,
 } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-// import { IconContext } from "react-icons";
-import { IconContext } from "react-icons";
-import { AiOutlineCheck } from "react-icons/ai";
 import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
+import GameComponent from "../GameComponent"; // Assuming GameComponent is in the correct location
 
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
@@ -35,7 +33,8 @@ const ImageGenerator = () => {
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState("vivid"); // Default style'
+  const [artStyle, setArtStyle] = useState("vivid");
+  const [showGame, setShowGame] = useState(false); // Change to false initially
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -77,9 +76,9 @@ const ImageGenerator = () => {
             "User-Agent": "Chrome",
           },
           body: JSON.stringify({
-            prompt: inputRef.current.value,
+            prompt: `${inputRef.current.value} - Style: ${artStyle} ${posterSize}`,
             n: numImages,
-            style: selectedStyle,
+            style: setArtStyle,
           }),
         }
       );
@@ -97,11 +96,12 @@ const ImageGenerator = () => {
         imageUrls.forEach(async (imageUrl) => {
           try {
             await addDoc(imageCollectionRef, { imageUrl });
-            // toast.success("Image URL stored in Firestore: " + imageUrl);
           } catch (error) {
             console.error("Error storing image URL in Firestore:", error);
           }
         });
+
+        setShowGame(false); // Close the game modal after images are generated
       } else {
         toast.error("Failed to fetch image data from the API");
       }
@@ -125,7 +125,7 @@ const ImageGenerator = () => {
   const handleAddToCart = (imageUrl) => {
     if (!cartItems.includes(imageUrl)) {
       setCartItems([...cartItems, imageUrl]);
-      handleShowModal(); // Show the modal after adding the item to the cart
+      handleShowModal();
     } else {
       toast.info("Item is already in the cart.");
     }
@@ -140,10 +140,9 @@ const ImageGenerator = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    // Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    let imagesLoaded = 0; // Counter for loaded images
+    let imagesLoaded = 0;
 
     generatedImageUrls.forEach((url, index) => {
       const img = new Image();
@@ -151,13 +150,10 @@ const ImageGenerator = () => {
         const aspectRatio = img.width / img.height;
         let width, height, x, y;
 
-        // Determine size based on selected posterSize
         if (posterSize === "portrait") {
-          // Portrait orientation
           width = aspectRatio > 1 ? canvas.width / 2 : canvas.width;
           height = aspectRatio > 1 ? canvas.height : canvas.height / 2;
         } else {
-          // Landscape orientation
           width = aspectRatio > 1 ? canvas.width : canvas.width / 2;
           height = aspectRatio > 1 ? canvas.height / 2 : canvas.height;
         }
@@ -167,13 +163,10 @@ const ImageGenerator = () => {
 
         context.drawImage(img, x, y, width, height);
 
-        // Increment the counter
         imagesLoaded++;
 
-        // If all images are loaded, do something
         if (imagesLoaded === generatedImageUrls.length) {
           console.log("All images loaded!");
-          // You can do something here if needed
         }
       };
       img.src = url;
@@ -188,22 +181,13 @@ const ImageGenerator = () => {
 
   return (
     <>
-      {/* Header component */}
-      <Header
-        cartItems={cartItems}
-        handleRemoveFromCart={handleRemoveFromCart}
-      />
-      <ToastContainer />
       <Container fluid>
         <Row className="image-generator mt-20 p-3 gap-4 gap-md-0 align-items-center justify-content-center">
           <Col md={8}>
             <div className="live-preview text-center">
-              <h1 className="text-center">
-                {/* Convert Your Imagination into Reality with AI */}
-              </h1>
+              <h1 className="text-center"></h1>
               <ProgressBar animated now={progress} label={`${progress}%`} />
-              {loading && <p className="pb-0">Please Wait...</p>}
-              {isImageGenerated && (
+              {loading ? null : isImageGenerated ? (
                 <div className="image-grid p-4 d-flex flex-column">
                   {generatedImageUrls.slice(0, numImages).map((url, index) => (
                     <div key={index} className="image-container">
@@ -222,15 +206,18 @@ const ImageGenerator = () => {
                       </span>
                     </div>
                   ))}
-              <canvas ref={canvasRef} className=" rounded-4 mt-4 canvas d-none" />
+                  <canvas
+                    ref={canvasRef}
+                    className="rounded-4 mt-4 canvas d-none"
+                  />
                 </div>
-              )}
+              ) : null}
             </div>
             <Form.Group className="d-flex justify-content-between align-items-center mt-2">
               <Card className="mt-2 w-100 w-md-50 text-center">
                 <Card.Body>
                   <Form.Group className="d-flex align-items-center justify-content-evenly gap-4">
-                <h3 className="mb-0">Choose the Pattern</h3>
+                    <h3 className="mb-0">Choose the Pattern</h3>
                     <Form.Check
                       type="radio"
                       label="Portrait"
@@ -259,53 +246,26 @@ const ImageGenerator = () => {
                 <Card.Body>
                   <h2>Choose Your Style</h2>
                   <Form.Group className="d-flex align-items-center justify-content-center gap-4">
-                    <IconContext.Provider
-                      value={{
-                        size: "2rem",
-                        style: { verticalAlign: "middle" },
-                      }}
+                    <Form.Select
+                      value={artStyle}
+                      onChange={(e) => setArtStyle(e.target.value)}
+                      className="d-flex align-items-center justify-content-center gap-4"
                     >
-                      <Form.Check
-                        type="radio"
-                        label={<div>Vivid</div>}
-                        name="style"
-                        value="vivid"
-                        checked={selectedStyle === "vivid"}
-                        onChange={(e) => setSelectedStyle(e.target.value)}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label={<div>Natural</div>}
-                        name="style"
-                        value="natural"
-                        checked={selectedStyle === "natural"}
-                        onChange={(e) => setSelectedStyle(e.target.value)}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label={<div>Anime</div>}
-                        name="style"
-                        value="vivid" // Default to 'vivid' for unsupported styles
-                        checked={selectedStyle === "vivid"}
-                        onChange={(e) => setSelectedStyle(e.target.value)}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label={<div>Realistic</div>}
-                        name="style"
-                        value="vivid" // Default to 'vivid' for unsupported styles
-                        checked={selectedStyle === "vivid"}
-                        onChange={(e) => setSelectedStyle(e.target.value)}
-                      />
-                      <Form.Check
-                        type="radio"
-                        label={<div>Cyberpunk</div>}
-                        name="style"
-                        value="vivid" // Default to 'vivid' for unsupported styles
-                        checked={selectedStyle === "vivid"}
-                        onChange={(e) => setSelectedStyle(e.target.value)}
-                      />
-                    </IconContext.Provider>
+                      <option value="vivid">Vivid</option>
+                      <option value="natural">Natural</option>
+                      <option value="Anime">Anime</option>
+                      <option value="Realistic">Realistic</option>
+                      <option value="Impressionism">Impressionism</option>
+                      <option value="Post-Impressionism">Post-Impressionism</option>
+                      <option value="Pointillism">Pointillism</option>
+                      <option value="Cubism">Cubism</option>
+                      <option value="Fauvism">Fauvism</option>
+                      <option value="Pop Art">Pop Art</option>
+                      <option value="Minimalism">Minimalism</option>
+                      <option value="Abstract Expressionism">Abstract Expressionism</option>
+                      <option value="Surrealism">Surrealism</option>
+                      <option value="Hyperrealism">Hyperrealism</option>
+                    </Form.Select>
                   </Form.Group>
                 </Card.Body>
               </Card>
@@ -320,7 +280,7 @@ const ImageGenerator = () => {
                       onChange={(e) => setInspirationText(e.target.value)}
                       className="user-input"
                     />
-                    <Button onClick={imageGenerator} variant="primary">
+                    <Button onClick={() => {imageGenerator(); setShowGame(true);}} variant="primary">
                       Generate
                     </Button>
                   </Form.Group>
@@ -336,6 +296,19 @@ const ImageGenerator = () => {
         cartItems={cartItems}
         handleRemoveFromCart={handleRemoveFromCart}
       />
+      <Modal show={showGame} onHide={() => setShowGame(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Interactive Game</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <GameComponent
+            onGameComplete={(score) => {
+              console.log("Game score:", score);
+              setShowGame(false);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
