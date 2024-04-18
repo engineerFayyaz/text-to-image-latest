@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBZ7YNRP0zQ5ALqJtGngMYMLX0Iwrk_an4",
   authDomain: "infinitoai.firebaseapp.com",
@@ -12,9 +14,20 @@ const firebaseConfig = {
   measurementId: "G-9558TMSP3W"
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-export {auth,provider}
+
+// Initialize Firebase Storage
+const storage = getStorage(app);
+
+// Function to upload image to Firebase Storage
+const uploadImageToStorage = async (imageFile) => {
+  const storageRef = ref(storage, `images/${imageFile.name}`);
+  await uploadBytes(storageRef, imageFile);
+  return getDownloadURL(storageRef);
+};
+
+export { app, auth, provider, uploadImageToStorage };
