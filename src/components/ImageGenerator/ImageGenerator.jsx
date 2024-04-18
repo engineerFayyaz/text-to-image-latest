@@ -295,12 +295,13 @@ const ImageGenerator = () => {
         handleClose={handleCloseModal}
         cartItems={cartItems}
         handleRemoveFromCart={handleRemoveFromCart}
+        
       />
-      <Modal show={showGame} onHide={() => setShowGame(false)} centered>
-        <Modal.Header closeButton>
+      <Modal show={showGame} onHide={() => setShowGame(false)} centered size="xl" backdrop="static" >
+        <Modal.Header closeButton className="p-2">
           <Modal.Title>Interactive Game</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="p-0">
           <GameComponent
             onGameComplete={(score) => {
               console.log("Game score:", score);
