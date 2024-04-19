@@ -10,7 +10,7 @@ const GameComponent = ({ onGameComplete }) => {
   const [isGameActive, setIsGameActive] = useState(true);
 
   useEffect(() => {
-    toast("Let's play the game until AI is generating the image", { autoClose: 4000 });
+    // toast("Let's play the game until AI is generating the image", { autoClose: 4000 });
 
     const timer = setInterval(() => {
       if (timeLeft > 0) {
@@ -54,7 +54,9 @@ const GameComponent = ({ onGameComplete }) => {
 
   return (
     <div className="game-container">
+      <div className="overlay"></div>
       <ToastContainer />
+      <div className="content">
       <h2>Ai Generated Game</h2>
       <p className="score">Score: {score}</p>
       <p className="time-left">Time Left: {timeLeft} seconds</p>
@@ -76,6 +78,7 @@ const GameComponent = ({ onGameComplete }) => {
           <button onClick={handleRestart}>Play Again</button>
         </div>
       )}
+      </div>
     </div>
   );
 };
