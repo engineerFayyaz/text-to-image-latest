@@ -13,13 +13,14 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Loader from "../Loader";
+import { faCreativeCommonsPd } from "@fortawesome/free-brands-svg-icons";
 
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
@@ -72,9 +73,10 @@ const ImageGenerator = () => {
       await uploadBytes(storageRef, inputFile);
 
       const imageUrl = await getDownloadURL(storageRef);
+      // await imageGenerator(imageUrl);
 
-      await imageGenerator(imageUrl);
-
+      console.log(`Uploading ${inputFile.name} `);
+      toast.success("Image uploaded successfully");
       setLoading(false);
       setProgress(100);
     } catch (error) {
@@ -220,12 +222,11 @@ const ImageGenerator = () => {
           <Col md={8}>
             <div className="live-preview text-center">
               <h1 className="text-center"></h1>
-              <ProgressBar animated now={progress} label={`${progress}%`} />
+              {/* <ProgressBar animated now={progress} label={`${progress}%`} /> */}
               {loading ? (
                 <>
                 AI is generating for you plzz wait...
-                <Loader /> 
-                
+                <Loader title={"AI is generating for you plzz wait..."} /> 
                 </>
               ) : isImageGenerated ? (
                 <div className="image-grid p-4 d-flex flex-column">
@@ -314,7 +315,7 @@ const ImageGenerator = () => {
                   </Form.Group>
                 </Card.Body>
               </Card>
-              <Card className="mt-2 w-100">
+              <Card className=" mt-2 mb-5 w-100">
                 <Card.Body>
                   <Form.Group >
                     <Form.Control
@@ -323,8 +324,8 @@ const ImageGenerator = () => {
                       onChange={handleFileChange}
                       className="form-control-file"
                     />
-                    <Button onClick={handleImageUpload} variant="primary">
-                      Upload Image
+                    <Button onClick={handleImageUpload} variant="primary" className=" upload_button position-absolute ">
+                      <FontAwesomeIcon icon={faUpload} /> 
                     </Button>
                   </Form.Group>
                 </Card.Body>
@@ -344,12 +345,11 @@ const ImageGenerator = () => {
                     <Button
                       onClick={() => {
                         imageGenerator();
-                        setShowGame(true);
                       }}
                       className="btn-53"
                       variant="primary"
                     >
-                      <div className="original">Generate</div>
+                      <div className="original">  Generate</div>
                       <div className="letters">
                         <span>L</span>
                         <span>E</span>
