@@ -182,7 +182,7 @@ const ImageGenerator = () => {
   return (
     <>
       <Container fluid>
-        <Row className="image-generator mt-20 p-3 gap-4 gap-md-0 align-items-center justify-content-center">
+        <Row className="image-generator mt-20 p-0 p-md-3 gap-4 gap-md-0 align-items-center justify-content-center">
           <Col md={8}>
             <div className="live-preview text-center">
               <h1 className="text-center"></h1>
@@ -216,7 +216,7 @@ const ImageGenerator = () => {
             <Form.Group className="d-flex justify-content-between align-items-center mt-2">
               <Card className="mt-2 w-100 w-md-50 text-center">
                 <Card.Body>
-                  <Form.Group className="d-flex align-items-center justify-content-evenly gap-4">
+                  <Form.Group className="d-flex align-items-center justify-content-evenly gap-4 flex-wrap ">
                     <h3 className="mb-0">Choose the Pattern</h3>
                     <Form.Check
                       type="radio"
@@ -249,20 +249,25 @@ const ImageGenerator = () => {
                     <Form.Select
                       value={artStyle}
                       onChange={(e) => setArtStyle(e.target.value)}
-                      className="d-flex align-items-center justify-content-center gap-4"
+                      className="d-flex align-items-center justify-content-center gap-4 "
+                      style={{fontWeight: '600', fontSize: '18px'}}
                     >
                       <option value="vivid">Vivid</option>
                       <option value="natural">Natural</option>
                       <option value="Anime">Anime</option>
                       <option value="Realistic">Realistic</option>
                       <option value="Impressionism">Impressionism</option>
-                      <option value="Post-Impressionism">Post-Impressionism</option>
+                      <option value="Post-Impressionism">
+                        Post-Impressionism
+                      </option>
                       <option value="Pointillism">Pointillism</option>
                       <option value="Cubism">Cubism</option>
                       <option value="Fauvism">Fauvism</option>
                       <option value="Pop Art">Pop Art</option>
                       <option value="Minimalism">Minimalism</option>
-                      <option value="Abstract Expressionism">Abstract Expressionism</option>
+                      <option value="Abstract Expressionism">
+                        Abstract Expressionism
+                      </option>
                       <option value="Surrealism">Surrealism</option>
                       <option value="Hyperrealism">Hyperrealism</option>
                     </Form.Select>
@@ -271,7 +276,7 @@ const ImageGenerator = () => {
               </Card>
               <Card className="mt-2 w-100">
                 <Card.Body>
-                  <Form.Group className="d-flex">
+                  <Form.Group >
                     <Form.Control
                       type="text"
                       ref={inputRef}
@@ -280,8 +285,25 @@ const ImageGenerator = () => {
                       onChange={(e) => setInspirationText(e.target.value)}
                       className="user-input"
                     />
-                    <Button onClick={() => {imageGenerator(); setShowGame(true);}} variant="primary">
-                      Generate
+
+                    <Button
+                      onClick={() => {
+                        imageGenerator();
+                        setShowGame(true);
+                      }}
+                      className="btn-53"
+                      variant="primary"
+                    >
+                      <div className="original">Generate</div>
+                      <div className="letters">
+                        <span>L</span>
+                        <span>E</span>
+                        <span>T'</span>
+                        <span>s</span>
+                        <span>G</span>
+                        <span>O</span>
+                      </div>
+                      {/* Generate */}
                     </Button>
                   </Form.Group>
                 </Card.Body>
@@ -295,9 +317,14 @@ const ImageGenerator = () => {
         handleClose={handleCloseModal}
         cartItems={cartItems}
         handleRemoveFromCart={handleRemoveFromCart}
-        
       />
-      <Modal show={showGame} onHide={() => setShowGame(false)} centered size="xl" backdrop="static" >
+      <Modal
+        show={showGame}
+        onHide={() => setShowGame(false)}
+        centered
+        size="xl"
+        backdrop="static"
+      >
         <Modal.Header closeButton className="p-2">
           <Modal.Title>Interactive Game</Modal.Title>
         </Modal.Header>
