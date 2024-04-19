@@ -19,7 +19,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import GameComponent from "../GameComponent"; // Assuming GameComponent is in the correct location
+import Loader from "../Loader";
 
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
@@ -30,13 +30,13 @@ const ImageGenerator = () => {
   const [posterSize, setPosterSize] = useState("A4");
   const [numImages] = useState(1);
   const [isImageGenerated, setIsImageGenerated] = useState(false);
-  const [inputFile, setInputFile] = useState(null); // Add state for uploaded file
+  const [inputFile, setInputFile] = useState(null);
   const inputRef = useRef(null);
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [artStyle, setArtStyle] = useState("vivid");
-  const [showGame, setShowGame] = useState(false); // Change to false initially
+  const [showGame, setShowGame] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
   const storage = getStorage();
@@ -51,12 +51,11 @@ const ImageGenerator = () => {
       }
     });
 
-    // Clean up subscription on unmount
     return () => unsubscribe();
   }, [auth, navigate]);
 
   const handleFileChange = (e) => {
-    setInputFile(e.target.files[0]); // Store the selected file in state
+    setInputFile(e.target.files[0]);
   };
 
   const handleImageUpload = async () => {
@@ -72,10 +71,8 @@ const ImageGenerator = () => {
       const storageRef = ref(storage, `images/${inputFile.name}`);
       await uploadBytes(storageRef, inputFile);
 
-      // Get the download URL for the image
       const imageUrl = await getDownloadURL(storageRef);
 
-      // Trigger image generation with the Firebase Storage URL
       await imageGenerator(imageUrl);
 
       setLoading(false);
@@ -224,7 +221,13 @@ const ImageGenerator = () => {
             <div className="live-preview text-center">
               <h1 className="text-center"></h1>
               <ProgressBar animated now={progress} label={`${progress}%`} />
-              {loading ? null : isImageGenerated ? (
+              {loading ? (
+                <>
+                AI is generating for you plzz wait...
+                <Loader /> 
+                
+                </>
+              ) : isImageGenerated ? (
                 <div className="image-grid p-4 d-flex flex-column">
                   {generatedImageUrls.slice(0, numImages).map((url, index) => (
                     <div key={index} className="image-container">
@@ -370,25 +373,7 @@ const ImageGenerator = () => {
         cartItems={cartItems}
         handleRemoveFromCart={handleRemoveFromCart}
       />
-      <Modal
-        show={showGame}
-        onHide={() => setShowGame(false)}
-        centered
-        size="xl"
-        backdrop="static"
-      >
-        <Modal.Header closeButton className="p-2">
-          <Modal.Title>Interactive Game</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-0">
-          <GameComponent
-            onGameComplete={(score) => {
-              console.log("Game score:", score);
-              setShowGame(false);
-            }}
-          />
-        </Modal.Body>
-      </Modal>
+    
     </>
   );
 };
