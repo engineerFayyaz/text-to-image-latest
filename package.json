@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-chai-friendly": "^0.7.4"
+    "eslint-plugin-chai-friendly": "^0.7.4",
+    "http-proxy-middleware": "^3.0.0"
   }
 }

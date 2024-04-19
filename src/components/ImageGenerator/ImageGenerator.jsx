@@ -18,6 +18,7 @@ import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import GameComponent from "../GameComponent"; // Assuming GameComponent is in the correct location
 
 const ImageGenerator = () => {
@@ -29,6 +30,7 @@ const ImageGenerator = () => {
   const [posterSize, setPosterSize] = useState("A4");
   const [numImages] = useState(1);
   const [isImageGenerated, setIsImageGenerated] = useState(false);
+  const [inputFile, setInputFile] = useState(null); // Add state for uploaded file
   const inputRef = useRef(null);
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
@@ -37,6 +39,7 @@ const ImageGenerator = () => {
   const [showGame, setShowGame] = useState(false); // Change to false initially
   const auth = getAuth();
   const navigate = useNavigate();
+  const storage = getStorage();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -52,7 +55,40 @@ const ImageGenerator = () => {
     return () => unsubscribe();
   }, [auth, navigate]);
 
-  const imageGenerator = async () => {
+  const handleFileChange = (e) => {
+    setInputFile(e.target.files[0]); // Store the selected file in state
+  };
+
+  const handleImageUpload = async () => {
+    if (!inputFile) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+
+    setLoading(true);
+    setProgress(0);
+
+    try {
+      const storageRef = ref(storage, `images/${inputFile.name}`);
+      await uploadBytes(storageRef, inputFile);
+
+      // Get the download URL for the image
+      const imageUrl = await getDownloadURL(storageRef);
+
+      // Trigger image generation with the Firebase Storage URL
+      await imageGenerator(imageUrl);
+
+      setLoading(false);
+      setProgress(100);
+    } catch (error) {
+      console.error("Error uploading image to Firebase Storage:", error);
+      toast.error("Error uploading image. Please try again.");
+      setLoading(false);
+      setProgress(0);
+    }
+  };
+
+  const imageGenerator = async (imageUrl) => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
 
@@ -79,6 +115,7 @@ const ImageGenerator = () => {
             prompt: `${inputRef.current.value} - Style: ${artStyle} ${posterSize}`,
             n: numImages,
             style: setArtStyle,
+            // image: imageUrl, // Pass the Firebase Storage URL here
           }),
         }
       );
@@ -273,6 +310,21 @@ const ImageGenerator = () => {
                 <Card.Body>
                   <Form.Group className="d-flex">
                     <Form.Control
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="form-control-file"
+                    />
+                    <Button onClick={handleImageUpload} variant="primary">
+                      Upload Image
+                    </Button>
+                  </Form.Group>
+                </Card.Body>
+              </Card>
+              <Card className="mt-2 w-100">
+                <Card.Body>
+                  <Form.Group className="d-flex">
+                    <Form.Control
                       type="text"
                       ref={inputRef}
                       value={inspirationText}
@@ -295,12 +347,13 @@ const ImageGenerator = () => {
         handleClose={handleCloseModal}
         cartItems={cartItems}
         handleRemoveFromCart={handleRemoveFromCart}
+        
       />
-      <Modal show={showGame} onHide={() => setShowGame(false)} centered>
-        <Modal.Header closeButton>
+      <Modal show={showGame} onHide={() => setShowGame(false)} centered size="xl" backdrop="static" >
+        <Modal.Header closeButton className="p-2">
           <Modal.Title>Interactive Game</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="p-0">
           <GameComponent
             onGameComplete={(score) => {
               console.log("Game score:", score);
