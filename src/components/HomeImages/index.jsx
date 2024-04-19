@@ -5,7 +5,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 export default function HomeImages() {
   const [images, setImages] = useState([]);
-  
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -33,12 +33,12 @@ export default function HomeImages() {
         <h1 className="text-5xl font-bold">See AI-made Images</h1>
         <p className="text-2xl p-2">We created a few images</p>
       </div>
-      <div className="grid grid-cols-4 gap-2">
-        {images.map((image) => (
+      <div className="grid grid-cols-4 gap-2">  
+        {images.slice(0,29).map((image) => (
           <div key={image.id} className="image-container">
             <img
-              src={image.url} // Assuming 'url' is the field name in your Firestore document that contains the image URL
-              alt={image.alt} // Assuming 'alt' is the field name in your Firestore document that contains the image alt text
+              src={image.imageUrl} // Use 'imageUrl' instead of 'url'
+              alt={image.alt} // Assuming 'alt' is still the field name for the alt text
               className="image-item"
             />
             <div className="overlay">
@@ -46,6 +46,7 @@ export default function HomeImages() {
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );
