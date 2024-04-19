@@ -44,12 +44,12 @@ export default function HomeImages() {
         <h1 className="text-5xl font-bold">See AI-made Images</h1>
         <p className="text-2xl p-2">We created a few images</p>
       </div>
-      <div className="grid grid-cols-4 gap-3">
-        {images.map((image) => (
+      <div className="grid grid-cols-4 gap-2">  
+        {images.slice(0,29).map((image) => (
           <div key={image.id} className="image-container">
             <img
-              src={image.url} // Assuming 'imageUrl' is the field name in your Firestore document that contains the image URL
-              alt={"Ai Generated"} // Use 'alt' text or placeholder
+              src={image.imageUrl} // Use 'imageUrl' instead of 'url'
+              alt={"AI Generated Images"} // Assuming 'alt' is still the field name for the alt text
               className="image-item"
             />
             <div className="overlay">
@@ -57,6 +57,7 @@ export default function HomeImages() {
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );
