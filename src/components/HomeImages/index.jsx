@@ -36,13 +36,17 @@ export default function HomeImages() {
         setError("Error fetching images: " + error.message);
       }
     };
-
+    console.log("images: ", images);
     fetchImages();
   }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+  // useEffect(() => {
+  //   console.log("images: ", images);
+  // }, [images]);
 
   return (
     <div className="mt-20">

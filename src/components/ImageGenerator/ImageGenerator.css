@@ -390,6 +390,15 @@ input[type="radio"]{
   top: 16px;
   text-transform: uppercase;
 }
+.upload_button{
+  right: 10px;
+  top: 15px;
+  transition: transform .3s ease;
+
+}
+.upload_button:hover{
+  transform: translateY(-5px);
+}
 
 @media screen and (max-width: 480px){
   .btn-53 {
