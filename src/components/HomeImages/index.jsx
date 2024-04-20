@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import "../../components/HomeImages/HomeImages.css";
 import axios from 'axios';
-
-const cloudinaryConfig = {
-  cloudName: 'lms-empty',
-  apiKey: '465825886714436',
-  apiSecret: '_XtyARctyPki8NutUmKpElof_Cw',
-  uploadPreset: 'vikings',
-  // uploadUrl: 'https://api.cloudinary.com/v1_1/lms-empty/image/upload'
-};
-
+import "../../components/HomeImages/HomeImages.css"
 export default function HomeImages() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
@@ -17,26 +8,20 @@ export default function HomeImages() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/resources/image`, {
-          params: {
-            type: 'upload', // Fetch only uploaded images
-            max_results: 20 // Limit the number of results per page
-          },
-          headers: {
-            Authorization: `Basic ${btoa(`${cloudinaryConfig.apiKey}:${cloudinaryConfig.apiSecret}`)}`
-          }
-        });
+        const response = await axios.get('https://ourbrandtv.com/mobile/public/api/Get_Image');
 
-        if (response.status === 200) {
-          setImages(response.data.resources);
+        console.log('API Response:', response); // Add this debug log
+
+        if (response.data.status === '1') {
+          setImages(response.data.data);
         } else {
-          setError("Failed to fetch images from Cloudinary");
+          setError("Failed to fetch images from the API");
         }
       } catch (error) {
         setError("Error fetching images: " + error.message);
       }
     };
-    console.log("images: ", images);
+
     fetchImages();
   }, []);
 
@@ -44,9 +29,9 @@ export default function HomeImages() {
     return <div>Error: {error}</div>;
   }
 
-  // useEffect(() => {
-  //   console.log("images: ", images);
-  // }, [images]);
+  console.log('Images:', images); // Add this debug log
+
+  const reversedImageUrls = images.slice().reverse();
 
   return (
     <div className="mt-20">
@@ -55,15 +40,16 @@ export default function HomeImages() {
         <p className="text-2xl p-2">We created a few images</p>
       </div>
       <div className="grid grid-cols-4 gap-2">  
-        {images.map(image => (
-          <div key={image.public_id} className="image-container">
+        {reversedImageUrls.map(image => (
+          <div key={image.id} className="image-container">
             <img
-              src={image.secure_url}
-              alt={image.public_id}
+              src={image.cloud_url || image.gen_url} // Assuming 'cloud_url' contains the URL of the image
+              alt={`Image ${image.id}`}
               className="image-item"
             />
+            {/* Assuming 'gen_url' is for generating URL */}
             <div className="overlay">
-              <span>{image.public_id}</span>
+              {/* <span>{image.gen_url}</span> */}
             </div>
           </div>
         ))}
