@@ -18,8 +18,19 @@ import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 import Loader from "../Loader";
+import axios from "axios";
+
+
+const cloudinaryConfig = {
+  cloudName: 'lms-empty',
+  apiKey: '465825886714436',
+  apiSecret: '_XtyARctyPki8NutUmKpElof_Cw',
+  uploadPreset: 'vikings',
+  uploadUrl: 'https://api.cloudinary.com/v1_1/lms-empty/image/upload'
+};
+
 
 const ImageGenerator = () => {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
@@ -37,9 +48,12 @@ const ImageGenerator = () => {
   const [showModal, setShowModal] = useState(false);
   const [artStyle, setArtStyle] = useState("vivid");
   const [showGame, setShowGame] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const auth = getAuth();
   const navigate = useNavigate();
   const storage = getStorage();
+  const inputFileRef = useRef(null);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -53,50 +67,50 @@ const ImageGenerator = () => {
 
     return () => unsubscribe();
   }, [auth, navigate]);
-
-  const handleFileChange = (e) => {
-    setInputFile(e.target.files[0]);
-  };
-
-  const handleImageUpload = async () => {
-    if (!inputFile) {
-      toast.error("Please select an image to upload.");
-      return;
-    }
-
-    setLoading(true);
-    setProgress(0);
-
+ 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
     try {
-      const storageRef = ref(storage, `images/${inputFile.name}`);
-      await uploadBytes(storageRef, inputFile);
-
-      const imageUrl = await getDownloadURL(storageRef);
-
-      await imageGenerator(imageUrl);
-
-      setLoading(false);
-      setProgress(100);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", cloudinaryConfig.uploadPreset);
+  
+      const response = await axios.post(
+        cloudinaryConfig.uploadUrl,
+        formData
+      );
+      
+      if (response.status === 200) {
+        setImageUrl(response.data.secure_url);
+        toast.success("image uploaded successfully ")
+      } else {
+        console.error("Failed to upload image");
+      }
     } catch (error) {
-      console.error("Error uploading image to Firebase Storage:", error);
-      toast.error("Error uploading image. Please try again.");
-      setLoading(false);
-      setProgress(0);
+      console.error("Error:", error);
     }
   };
 
-  const imageGenerator = async (imageUrl) => {
+  const handleClick = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click();
+    } else {
+      console.error("File input ref is not initialized");
+    }
+  };
+  
+  const imageGenerator = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
-
+  
     if (!inputRef.current || !inputRef.current.value) {
       toast.error("Please enter a description.");
       return;
     }
-
+  
     setLoading(true);
     setProgress(0);
-
+  
     try {
       const response = await fetch(
         "https://api.openai.com/v1/images/generations",
@@ -112,11 +126,10 @@ const ImageGenerator = () => {
             prompt: `${inputRef.current.value} - Style: ${artStyle} ${posterSize}`,
             n: numImages,
             style: setArtStyle,
-            // image: imageUrl, // Pass the Firebase Storage URL here
           }),
         }
       );
-
+  
       if (response.ok) {
         const data = await response.json();
         const imageUrls = data.data.map((item) => item.url);
@@ -124,29 +137,103 @@ const ImageGenerator = () => {
         setOriginalImageUrl(imageUrls[0]);
         setGeneratedImageUrls(imageUrls);
         setIsImageGenerated(true);
-
-        const db = getFirestore();
-        const imageCollectionRef = collection(db, "images");
-        imageUrls.forEach(async (imageUrl) => {
-          try {
-            await addDoc(imageCollectionRef, { imageUrl });
-          } catch (error) {
-            console.error("Error storing image URL in Firestore:", error);
+  
+        // Upload each generated image to Cloudinary
+        const cloudinaryUrls = [];
+        for (const imageUrl of imageUrls) {
+          const formData = new FormData();
+          formData.append("file", imageUrl);
+          formData.append("upload_preset", cloudinaryConfig.uploadPreset);
+  
+          const cloudinaryResponse = await axios.post(
+            cloudinaryConfig.uploadUrl,
+            formData
+          );
+  
+          if (cloudinaryResponse.status === 200) {
+            cloudinaryUrls.push(cloudinaryResponse.data.secure_url);
+          } else {
+            console.error("Failed to upload image to Cloudinary");
           }
-        });
-
+        }
+  
+        setGeneratedImageUrls(cloudinaryUrls);
         setShowGame(false); // Close the game modal after images are generated
       } else {
         toast.error("Failed to fetch image data from the API");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An error occurred while fetching image data");
+      toast.error("An error occurred while generating images");
     }
-
+  
     setLoading(false);
     setProgress(100);
   };
+  
+
+  // const imageGenerator = async (imageUrl) => {
+  //   const currentUser = auth.currentUser;
+  //   if (!currentUser) return;
+
+  //   if (!inputRef.current || !inputRef.current.value) {
+  //     toast.error("Please enter a description.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setProgress(0);
+
+  //   try {
+  //     const response = await fetch(
+  //       "https://api.openai.com/v1/images/generations",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization:
+  //             "Bearer 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",
+  //           "User-Agent": "Chrome",
+  //         },
+  //         body: JSON.stringify({
+  //           prompt: `${inputRef.current.value} - Style: ${artStyle} ${posterSize}`,
+  //           n: numImages,
+  //           style: setArtStyle,
+  //           // image: imageUrl, // Pass the Firebase Storage URL here
+  //         }),
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       const imageUrls = data.data.map((item) => item.url);
+  //       console.log("Generated Image URLs:", imageUrls);
+  //       setOriginalImageUrl(imageUrls[0]);
+  //       setGeneratedImageUrls(imageUrls);
+  //       setIsImageGenerated(true);
+
+  //       const db = getFirestore();
+  //       const imageCollectionRef = collection(db, "images");
+  //       imageUrls.forEach(async (imageUrl) => {
+  //         try {
+  //           await addDoc(imageCollectionRef, { imageUrl });
+  //         } catch (error) {
+  //           console.error("Error storing image URL in Firestore:", error);
+  //         }
+  //       });
+
+  //       setShowGame(false); // Close the game modal after images are generated
+  //     } else {
+  //       toast.error("Failed to fetch image data from the API");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("An error occurred while fetching image data");
+  //   }
+
+  //   setLoading(false);
+  //   setProgress(100);
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -320,12 +407,14 @@ const ImageGenerator = () => {
                     <Form.Control
                       type="file"
                       accept="image/*"
-                      onChange={handleFileChange}
+                      ref={inputFileRef}
+                      onChange={handleImageChange}
                       className="form-control-file"
                     />
-                    <Button onClick={handleImageUpload} variant="primary">
+                    <Button onClick={handleClick} variant="primary">
                       Upload Image
                     </Button>
+                    {/* {imageUrl && <img src={imageUrl} alt="Uploaded" />} */}
                   </Form.Group>
                 </Card.Body>
               </Card>
