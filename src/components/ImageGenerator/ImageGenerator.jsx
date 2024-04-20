@@ -13,7 +13,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -367,8 +367,10 @@ const ImageGenerator = () => {
                   </Form.Group>
                 </Card.Body>
               </Card>
-              <Card className="mt-2 w-100">
-                <Card.Body>
+              
+              <Card className="mt-2 mb-4 w-100">
+                <Card.Body className="text-center">
+                <h3>Choose Image To Upload</h3>
                   <Form.Group>
                     <Form.Control
                       type="file"
@@ -377,8 +379,8 @@ const ImageGenerator = () => {
                       onChange={handleImageChange}
                       className="form-control-file"
                     />
-                    <Button onClick={handleClick} variant="primary">
-                      Upload Image
+                    <Button onClick={handleClick} variant="primary" className="upload_image_icon">
+                     <FontAwesomeIcon icon={faUpload} />
                     </Button>
                     {/* {imageUrl && <img src={imageUrl} alt="Uploaded" />} */}
                   </Form.Group>
