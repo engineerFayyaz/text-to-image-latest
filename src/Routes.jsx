@@ -9,18 +9,10 @@ import Checkout from "./Pages/Checkout";
 import ContactUs from "./Pages/ContactUs";
 import AboutUs from "./Pages/AboutUs";
 import Create from "./Pages/Create";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("pk_live_51OWvQIFgKHDpomfgNwdCL517Au8V3EBr36RRilRzQlMtvhwWsHEwohfZN5nZE0CtxQaT6HOMA4amJwMrniC2ifRS00xCGhWqmZ");
 
 const ProjectRoutes = () => {
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    // Perform any initial state updates here
-    setCartItems(/* initial value */);
-  }, []);
+ 
 
   return (
     <React.Suspense fallback={<>Loading...</>}>
@@ -34,14 +26,7 @@ const ProjectRoutes = () => {
           <Route path="/Contact-us" element={<ContactUs />} />
           <Route path="/About-us" element={<AboutUs />} />
           <Route path="/create-Guide" element={<Create />} />
-          <Route
-            path="/checkout"
-            element={
-              <Elements stripe={stripePromise}>
-                <Checkout cartItems={cartItems} />
-              </Elements>
-            }
-          />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Router>
     </React.Suspense>

@@ -19,10 +19,10 @@ export default function HomeImages() {
       try {
         const response = await axios.get('https://ourbrandtv.com/mobile/public/api/Get_Image');
 
-        console.log('API Response:', response); 
+        console.log('API Response:', response);
 
         if (response.data.status === '1') {
-          const latestImages = response.data.data.slice(-20); 
+          const latestImages = response.data.data.slice(-20);
           setImages(latestImages);
         } else {
           setError("Failed to fetch images from the API");
@@ -57,7 +57,7 @@ export default function HomeImages() {
     setCartItems([...cartItems, imageUrl]);
   };
 
-  
+
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -72,24 +72,27 @@ export default function HomeImages() {
       <div className="grid grid-cols-4 gap-2">
         {images.slice().reverse().map(image => (
           <div key={image.id} className="image-container">
-            <img
-              src={image.cloud_url || image.gen_url}
-              alt="AI Generated Images"
-              className="image-item"
-            />
-
             <Button
               title="Add to Cart"
               onClick={() => handleAddToCart(image.cloud_url || image.gen_url)}
             >
               <FontAwesomeIcon icon={faCartShopping} />
             </Button>
+            <img
+              src={image.cloud_url || image.gen_url}
+              alt="AI Generated Images"
+              className="image-item"
+            />
 
-            <div className="overlay">
-              <span onClick={() => addToCart(image.cloud_url || image.gen_url)}>
-                <FontAwesomeIcon icon={faCartPlus} />
+            
+
+
+
+            {/* <div className="overlay">
+              <span >
+               Generated History
               </span>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
