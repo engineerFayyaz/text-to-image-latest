@@ -8,16 +8,14 @@ import {
   Button,
   Card,
   ProgressBar,
-  Modal,
 } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { getStorage } from "firebase/storage";
 import Loader from "../Loader";
 import axios from "axios";
 
@@ -39,16 +37,16 @@ const ImageGenerator = () => {
   const [posterSize, setPosterSize] = useState("A4");
   const [numImages] = useState(1);
   const [isImageGenerated, setIsImageGenerated] = useState(false);
-  const [inputFile, setInputFile] = useState(null);
+  // const [inputFile, setInputFile] = useState(null);
   const inputRef = useRef(null);
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [artStyle, setArtStyle] = useState("vivid");
-  const [imageUrl, setImageUrl] = useState("");
+  const [ setImageUrl] = useState("");
   const auth = getAuth();
   const navigate = useNavigate();
-  const storage = getStorage();
+  // const storage = getStorage();
   const inputFileRef = useRef(null);
 
   useEffect(() => {
