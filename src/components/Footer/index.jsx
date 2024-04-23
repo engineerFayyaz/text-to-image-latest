@@ -14,7 +14,7 @@ const Footer = () => {
                 <div className="container">
                     <div className="row ">
                         <div className="col-md-3 logo">
-                            <Link to="index.html">
+                            <Link to="/">
                                 <img
                                     src="/images/logo-3.png"
                                     alt=""

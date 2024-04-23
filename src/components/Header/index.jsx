@@ -78,7 +78,7 @@ const Header = ({ cartItems, handleRemoveFromCart }) => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="#" className="nav-link">
+                  <Link to="/create-Guide" className="nav-link">
                     Create
                   </Link>
                 </li>

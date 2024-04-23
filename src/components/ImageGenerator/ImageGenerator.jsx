@@ -94,7 +94,7 @@ const ImageGenerator = () => {
         gen_url: genUrl || "", // Send an empty string if genUrl is not available
         type: type, // 'cloud' for uploaded image, 'gen' for generated image
       });
-  
+
       if (response.status === 200) {
         toast.success(`Image submitted to the server`);
         console.log(`Image submitted to the server`);
@@ -109,7 +109,7 @@ const ImageGenerator = () => {
       return false;
     }
   };
-  
+
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -208,14 +208,15 @@ const ImageGenerator = () => {
     setShowModal(true);
   };
 
-  const handleAddToCart = (imageUrl) => {
-    if (!cartItems.includes(imageUrl)) {
-      setCartItems([...cartItems, imageUrl]);
-      handleShowModal();
+  const handleAddToCart = (url) => {
+    if (!cartItems.includes(url)) {
+      setCartItems([...cartItems, url]);
+      handleShowModal(); // Open the cart modal
     } else {
       toast.info("Item is already in the cart.");
     }
   };
+  
 
   const handleRemoveFromCart = (imageUrl) => {
     const updatedCart = cartItems.filter((item) => item !== imageUrl);
@@ -224,7 +225,12 @@ const ImageGenerator = () => {
 
   const drawImages = () => {
     const canvas = canvasRef.current;
+    if (!canvasRef.current) {
+      console.error("Canvas element not found.");
+      return;
+    }
     const context = canvas.getContext("2d");
+   
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -303,6 +309,7 @@ const ImageGenerator = () => {
                     ref={canvasRef}
                     className="rounded-4 mt-4 canvas d-none"
                   />
+
                 </div>
               ) : null}
             </div>
@@ -367,10 +374,10 @@ const ImageGenerator = () => {
                   </Form.Group>
                 </Card.Body>
               </Card>
-              
+
               <Card className="mt-2 mb-4 w-100">
                 <Card.Body className="text-center">
-                <h3>Choose Image To Upload</h3>
+                  <h3>Choose Image To Upload</h3>
                   <Form.Group>
                     <Form.Control
                       type="file"
@@ -380,7 +387,7 @@ const ImageGenerator = () => {
                       className="form-control-file"
                     />
                     <Button onClick={handleClick} variant="primary" className="upload_image_icon">
-                     <FontAwesomeIcon icon={faUpload} />
+                      <FontAwesomeIcon icon={faUpload} />
                     </Button>
                     {/* {imageUrl && <img src={imageUrl} alt="Uploaded" />} */}
                   </Form.Group>

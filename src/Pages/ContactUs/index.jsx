@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../../Pages/ContactUs/Contactus.css";
 import Header from "../../components/Header";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import Footer from "../../components/Footer";
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -183,6 +184,7 @@ const ContactUs = () => {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 };
