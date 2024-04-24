@@ -9,6 +9,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loader";
+import "../../Pages/Authentication/index"
 import { storeUserToLocalStorage } from "../../Utils/localStorage"; // Importing the function
 
 const Login = () => {
@@ -84,7 +85,7 @@ const Login = () => {
       {(loading || googleLoading) && <Loader />}{" "}
       {/* Render Loader component for both email/password and Google sign-in */}
       <div
-        className={`form-container sign-in ${
+        className={`form-container sign-in w-md-100 ${
           loading || googleLoading ? "blur" : ""
         }`}
       >
@@ -115,6 +116,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <a href="/signup" className="d-block d-md-none" id="register" >Dont have an account?</a>
           <button type="submit" className="authbtn" disabled={loading}>
             {loading ? "Loading..." : "Sign In"}
           </button>
