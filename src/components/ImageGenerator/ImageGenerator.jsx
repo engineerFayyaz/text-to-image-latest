@@ -366,7 +366,7 @@ const ImageGenerator = () => {
               <Card className="mt-2 mb-4 w-100">
                 <Card.Body className="text-center">
                   <h3>Choose Image To Upload</h3>
-                  <Form.Group>
+                  <Form.Group className="d-flex d-md-block">
                     <Form.Control
                       type="file"
                       accept="image/*"

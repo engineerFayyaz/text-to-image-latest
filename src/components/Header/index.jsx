@@ -6,7 +6,7 @@ import { getUserFromLocalStorage } from "../../Utils/localStorage";
 import { getAuth } from "firebase/auth";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import CartModal from "../Cart";
 const Header = ({ cartItems }) => {
