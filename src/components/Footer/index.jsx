@@ -101,13 +101,10 @@ const Footer = () => {
             <section id="copy-right">
             <div className="copy-right-sec animated">
     <div>
-        <i className="fa-solid fa-copyright" /> 
-        2024 by <Link to="#">AI-Image Generator</Link>
+        <i className="fa-solid fa-copyright me-2" /> 
+        2024 by <Link to="#">AI-Image Generator developed by  <Link to="https://codes-inc.com/" target="_blank">Codes Inc</Link> </Link>
     </div>
-    <div>
-        <i className="fa-solid fa-copyright" /> 
-       developed by  <Link to="https://codes-inc.com/" target="_blank">Codes Inc</Link>
-    </div>
+
 </div>
 
                 
