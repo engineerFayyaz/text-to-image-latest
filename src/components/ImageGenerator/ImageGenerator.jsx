@@ -8,16 +8,14 @@ import {
   Button,
   Card,
   ProgressBar,
-  Modal,
 } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faUpload } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "../Cart";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { getStorage } from "firebase/storage";
 import Loader from "../Loader";
 import axios from "axios";
 
@@ -39,16 +37,13 @@ const ImageGenerator = () => {
   const [posterSize, setPosterSize] = useState("A4");
   const [numImages] = useState(1);
   const [isImageGenerated, setIsImageGenerated] = useState(false);
-  const [inputFile, setInputFile] = useState(null);
   const inputRef = useRef(null);
   const canvasRef = useRef(null);
   const [cartItems, setCartItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [artStyle, setArtStyle] = useState("vivid");
-  const [imageUrl, setImageUrl] = useState("");
   const auth = getAuth();
   const navigate = useNavigate();
-  const storage = getStorage();
   const inputFileRef = useRef(null);
 
   useEffect(() => {
@@ -87,12 +82,27 @@ const ImageGenerator = () => {
     }
   };
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    try {
+      const uploadedImageUrl = await uploadToCloudinary(file);
+      if (uploadedImageUrl) {
+        await submitToApi(uploadedImageUrl, null, 'cloud');
+        toast.success("Image uploaded successfully");
+      } else {
+        console.error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const submitToApi = async (cloudUrl, genUrl, type) => {
     try {
       const response = await axios.post(`${apiBaseUrl}/Add_Image`, {
-        cloud_url: cloudUrl || "", // Send an empty string if cloudUrl is not available
-        gen_url: genUrl || "", // Send an empty string if genUrl is not available
-        type: type, // 'cloud' for uploaded image, 'gen' for generated image
+        cloud_url: type === 'cloud' ? cloudUrl : '',
+        gen_url: type === 'gen' ? genUrl : '',
+        type: type,
       });
 
       if (response.status === 200) {
@@ -107,23 +117,6 @@ const ImageGenerator = () => {
     } catch (error) {
       console.error("Error:", error);
       return false;
-    }
-  };
-
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    try {
-      const uploadedImageUrl = await uploadToCloudinary(file);
-      if (uploadedImageUrl) {
-        setImageUrl(uploadedImageUrl);
-        await submitToApi(uploadedImageUrl, 'cloud');
-        toast.success("Image uploaded successfully");
-      } else {
-        console.error("Failed to upload image");
-      }
-    } catch (error) {
-      console.error("Error:", error);
     }
   };
 
@@ -170,24 +163,20 @@ const ImageGenerator = () => {
         const data = await response.json();
         const imageUrls = data.data.map((item) => item.url);
         console.log("Generated Image URLs:", imageUrls);
-        setOriginalImageUrl(imageUrls[0]);
+
+        // Store the generated URLs in state
         setGeneratedImageUrls(imageUrls);
         setIsImageGenerated(true);
 
-        // Upload each generated image to Cloudinary
-        const cloudinaryUrls = [];
+        // Upload each generated image to Cloudinary and submit to the server
         for (const imageUrl of imageUrls) {
           const uploadedUrl = await uploadToCloudinary(imageUrl);
           if (uploadedUrl) {
-            cloudinaryUrls.push(uploadedUrl);
-            await submitToApi(uploadedUrl, 'gen');
+            await submitToApi('', uploadedUrl, 'gen'); // Submit the generated URL to the server
           } else {
             console.error("Failed to upload image to Cloudinary");
           }
         }
-
-        setGeneratedImageUrls(cloudinaryUrls);
-        // Close the game modal after images are generated
       } else {
         toast.error("Failed to fetch image data from the API");
       }
@@ -200,6 +189,7 @@ const ImageGenerator = () => {
     setProgress(100);
   };
 
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -211,12 +201,11 @@ const ImageGenerator = () => {
   const handleAddToCart = (url) => {
     if (!cartItems.includes(url)) {
       setCartItems([...cartItems, url]);
-      handleShowModal(); // Open the cart modal
+      handleShowModal();
     } else {
       toast.info("Item is already in the cart.");
     }
   };
-  
 
   const handleRemoveFromCart = (imageUrl) => {
     const updatedCart = cartItems.filter((item) => item !== imageUrl);
@@ -230,7 +219,6 @@ const ImageGenerator = () => {
       return;
     }
     const context = canvas.getContext("2d");
-   
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -238,6 +226,7 @@ const ImageGenerator = () => {
 
     generatedImageUrls.forEach((url, index) => {
       const img = new Image();
+      img.crossOrigin = "anonymous"; // To prevent tainted canvas error
       img.onload = () => {
         const aspectRatio = img.width / img.height;
         let width, height, x, y;
@@ -309,7 +298,6 @@ const ImageGenerator = () => {
                     ref={canvasRef}
                     className="rounded-4 mt-4 canvas d-none"
                   />
-
                 </div>
               ) : null}
             </div>
@@ -389,7 +377,6 @@ const ImageGenerator = () => {
                     <Button onClick={handleClick} variant="primary" className="upload_image_icon">
                       <FontAwesomeIcon icon={faUpload} />
                     </Button>
-                    {/* {imageUrl && <img src={imageUrl} alt="Uploaded" />} */}
                   </Form.Group>
                 </Card.Body>
               </Card>
@@ -421,7 +408,6 @@ const ImageGenerator = () => {
                         <span>G</span>
                         <span>O</span>
                       </div>
-                      {/* Generate */}
                     </Button>
                   </Form.Group>
                 </Card.Body>

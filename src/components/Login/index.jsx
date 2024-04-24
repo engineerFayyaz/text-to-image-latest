@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -15,7 +15,7 @@ import { storeUserToLocalStorage } from "../../Utils/localStorage"; // Importing
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [ setError] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for email/password sign-in
   const [googleLoading, setGoogleLoading] = useState(false); // Loading state for Google sign-in
   const auth = getAuth();

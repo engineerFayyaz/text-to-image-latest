@@ -104,10 +104,16 @@ li {
   color: #fff;
 }
 .copy-right-sec {
+  /* display: flex; */
+  justify-content: space-between;
   padding: 1rem;
   background: #642b9d;
   color: #e6e2e2;
   text-align: center;
+}
+
+.animated {
+  animation: fadeIn 1s ease-in-out;
 }
 .copy-right-sec a {
   color: whitesmoke;

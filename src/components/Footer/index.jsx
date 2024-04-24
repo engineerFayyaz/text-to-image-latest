@@ -99,9 +99,18 @@ const Footer = () => {
             {/* footer section end */}
             {/* footer copy right section start */}
             <section id="copy-right">
-                <div className="copy-right-sec">
-                    <i className="fa-solid fa-copyright" /> 2024 by <Link to="#">AI-Image Generator</Link>
-                </div>
+            <div className="copy-right-sec animated">
+    <div>
+        <i className="fa-solid fa-copyright" /> 
+        2024 by <Link to="#">AI-Image Generator</Link>
+    </div>
+    <div>
+        <i className="fa-solid fa-copyright" /> 
+       developed by  <Link to="https://codes-inc.com/" target="_blank">Codes Inc</Link>
+    </div>
+</div>
+
+                
             </section>
         </>
 

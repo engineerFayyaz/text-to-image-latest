@@ -6,11 +6,10 @@ import { getUserFromLocalStorage } from "../../Utils/localStorage";
 import { getAuth } from "firebase/auth";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import CartModal from "../Cart";
-const Header = ({ cartItems, handleRemoveFromCart }) => {
-  console.log("Props in Header:", cartItems, handleRemoveFromCart);
+const Header = ({ cartItems }) => {
   const [userData, setUserData] = useState(null);
   const auth = getAuth();
   const [showCart, setShowCart] = useState(false);

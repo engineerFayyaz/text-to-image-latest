@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Button } from "react-bootstrap";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../components/HomeImages/HomeImages.css";
 import CartModal from '../Cart';
 import { toast } from "react-toastify";
@@ -22,7 +21,7 @@ export default function HomeImages() {
         console.log('API Response:', response);
 
         if (response.data.status === '1') {
-          const latestImages = response.data.data.slice(-20);
+          const latestImages = response.data.data.slice(-24);
           setImages(latestImages);
         } else {
           setError("Failed to fetch images from the API");
