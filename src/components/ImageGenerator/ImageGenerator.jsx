@@ -131,15 +131,15 @@ const ImageGenerator = () => {
   const imageGenerator = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
-  
+
     if (!inputRef.current || !inputRef.current.value) {
       toast.error("Please enter a description.");
       return;
     }
-  
+
     setLoading(true);
     setProgress(0);
-  
+
     try {
       const response = await fetch(
         "https://api.openai.com/v1/images/generations",
@@ -158,16 +158,16 @@ const ImageGenerator = () => {
           }),
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
         const imageUrls = data.data.map((item) => item.url);
         console.log("Generated Image URLs:", imageUrls);
-  
+
         // Store the generated URLs in state
         setGeneratedImageUrls(imageUrls);
         setIsImageGenerated(true);
-  
+
         // Upload each generated image to Cloudinary and submit to the server
         for (const imageUrl of imageUrls) {
           const uploadedUrl = await uploadToCloudinary(imageUrl);
@@ -184,11 +184,11 @@ const ImageGenerator = () => {
       console.error("Error:", error);
       toast.error("An error occurred while generating images");
     }
-  
+
     setLoading(false);
     setProgress(100);
   };
-  
+
 
   const handleCloseModal = () => {
     setShowModal(false);
