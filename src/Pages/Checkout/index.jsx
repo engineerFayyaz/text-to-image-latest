@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { firestore } from "../../firebaseConfig";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-const Checkout = () => {
+const Checkout = ({  onSaveCheckoutData }) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const imageUrl = searchParams.get("imageUrl");
@@ -23,7 +23,8 @@ const Checkout = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
-  const stripeInstance = useStripe();
+  const [error, setError] = useState(null);
+  const stripe = useStripe();
   const elements = useElements();
 
   useEffect(() => {
@@ -34,28 +35,44 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+
     try {
-      const cardElement = elements.getElement(CardElement);
-      const { error, paymentMethod } = await stripeInstance.createPaymentMethod({
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
-        card: cardElement,
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: name,
+          email: email,
+          address: {
+            line1: address,
+            city: city,
+            state: state,
+            postal_code: zip
+          }
+        }
       });
-  
+
       if (error) {
         console.error("Error creating payment method:", error);
-        toast.error("An error occurred while processing your payment");
+        setError(error.message);
         return;
       }
-  
-      // Save checkout data only if payment method is successfully created
-      await saveCheckoutData(paymentMethod.id);
+
+      // Payment method created successfully, save checkout data
+      await onSaveCheckoutData(paymentMethod.id);
       toast.success("Your order has been placed successfully");
     } catch (error) {
-      console.error("Error saving checkout data:", error);
-      toast.error("An error occurred while placing your order");
+      console.error("Error processing payment:", error);
+      setError("An error occurred while processing your payment");
     }
   };
+
   
   const saveCheckoutData = async (paymentMethodId) => {
     try {
@@ -147,7 +164,8 @@ const Checkout = () => {
                   onChange={(e) => setZip(e.target.value)}
                   required
                 />
-
+                 <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
+                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="btn btn-primary mb-3">
                   <span className="ps-3">Pay $5</span>
                 </button>
