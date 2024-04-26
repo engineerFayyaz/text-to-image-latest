@@ -423,6 +423,10 @@ input[type="radio"]{
   .btn-53 .original{
     font-size: 10px;
   }
+  .upload_image_icon{
+    position: static !important;
+    padding: 0px 8px !important;
+  }
 }
 .btn-53 .original {
   background: var(--color);

@@ -51,3 +51,15 @@
     font-family: 'Times New Roman', Times, serif;
   }
   
+  .images-grid .image-container .img-cart-btn{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: #663399;
+    border: 0px;
+    transition: all .4s ease;
+  } 
+  .images-grid .image-container .img-cart-btn:hover{
+    transform: translateY(-10px);
+    background: rgb(37, 34, 34);
+  }

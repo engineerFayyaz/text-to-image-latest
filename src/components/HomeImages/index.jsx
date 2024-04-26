@@ -68,12 +68,13 @@ export default function HomeImages() {
         <h1 className="text-5xl font-bold">Your history</h1>
         <p className="text-2xl p-2">what your brain has imagined</p>
       </div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2 images-grid">
         {images.slice().reverse().map(image => (
-          <div key={image.id} className="image-container">
+          <div key={image.id} className="image-container img-grid-container">
             <Button
               title="Add to Cart"
               onClick={() => handleAddToCart(image.cloud_url || image.gen_url)}
+              className='img-cart-btn'
             >
               <FontAwesomeIcon icon={faCartShopping} />
             </Button>

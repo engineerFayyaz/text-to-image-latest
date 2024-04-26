@@ -3,12 +3,20 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "react-bootstrap-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 const AboutUs = () => {
     return (
         <>
             <>
                 <Header />
-                <div className=" step-section">
+                <div className=" p-0  container-fluid banner-top ">
+        <div className="banner-title text-center">
+          <h2>About AI Image Generator</h2>
+          <a href="/"><FontAwesomeIcon icon={faArrowAltCircleLeft} /> go back</a>
+        </div>
+      </div>
+                <div className=" step-section mt-0">
         {/* Back button with ArrowLeft icon */}
 
         <section id="creating" className="pt-5 pb-20">

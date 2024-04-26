@@ -154,6 +154,7 @@ const Checkout = () => {
               </form>
             </div>
             <div className="col-md-6 product-detail pt-4">
+              <div className="product">
               <h2 className="text-center title">Product Detail</h2>
               {imageUrlState && (
                 <div className="product-detail pt-4">
@@ -172,11 +173,9 @@ const Checkout = () => {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
-        <div className="container p-0 payment-details">
-          <div className="card px-4">
+              </div>
+              <div className="payment-details">
+              <div className="card px-4">
             <p className="h8 py-3">Payment Details</p>
             <div className="row gx-3">
               <div className="col-12">
@@ -230,6 +229,9 @@ const Checkout = () => {
                     required
                   />
                 </div>
+              </div>
+            </div>
+          </div>
               </div>
             </div>
           </div>

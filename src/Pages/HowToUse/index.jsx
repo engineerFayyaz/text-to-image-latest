@@ -5,20 +5,21 @@ import { ArrowLeft } from "react-bootstrap-icons"; // Import ArrowLeft icon from
 import "../HowToUse/Howtouse.css";
 import "../HowToUse/Howtouse.css";
 import Footer from "../../components/Footer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 function HowToUse() {
   return (
     <>
       <Header />
-      <div className=" step-section">
-        {/* Back button with ArrowLeft icon */}
-        <div className="back-link align-items-center justify-content-center d-md-flex">
-          <div className=" link">
-            <Link to="/">
-              <ArrowLeft size={24} /> Back
-            </Link>
-          </div>
+      <div className=" p-0  container-fluid banner-top ">
+        <div className="banner-title text-center">
+          <h2>Creating AI-Generated Images with Ease</h2>
+          <a href="/"><FontAwesomeIcon icon={faArrowAltCircleLeft} /> go back</a>
         </div>
+      </div>
+      <div className=" step-section mt-0">
+        {/* Back button with ArrowLeft icon */}
         <section id="creating" className="pt-5 pb-20">
           <div className="container-fluid">
             <div className="row">
