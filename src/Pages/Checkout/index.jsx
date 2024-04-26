@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { firestore } from "../../firebaseConfig";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-const Checkout = ({  onSaveCheckoutData }) => {
+const Checkout = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const imageUrl = searchParams.get("imageUrl");
@@ -32,6 +32,31 @@ const Checkout = ({  onSaveCheckoutData }) => {
       setImageUrl(imageUrl);
     }
   }, [imageUrl]);
+
+  const saveCheckoutData = async (paymentMethodId) => {
+    try {
+      const checkoutRef = firestore.collection("checkouts");
+      // Save checkout data to Firestore
+      await checkoutRef.add({
+        name,
+        email,
+        address,
+        city,
+        state,
+        zip,
+        cardName,
+        cardNumber,
+        expiry,
+        cvv,
+        imageUrl: imageUrlState,
+        paymentMethodId,
+        timestamp: new Date(),
+      });
+    } catch (error) {
+      console.error("Error saving checkout data:", error);
+      throw error; // Throw error for better error handling
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,7 +90,7 @@ const Checkout = ({  onSaveCheckoutData }) => {
       }
 
       // Payment method created successfully, save checkout data
-      await onSaveCheckoutData(paymentMethod.id);
+      await saveCheckoutData(paymentMethod.id);
       toast.success("Your order has been placed successfully");
     } catch (error) {
       console.error("Error processing payment:", error);
@@ -74,30 +99,7 @@ const Checkout = ({  onSaveCheckoutData }) => {
   };
 
   
-  const saveCheckoutData = async (paymentMethodId) => {
-    try {
-      const checkoutRef = firestore.collection("checkouts");
-      // Save checkout data to Firestore
-      await checkoutRef.add({
-        name,
-        email,
-        address,
-        city,
-        state,
-        zip,
-        cardName,
-        cardNumber,
-        expiry,
-        cvv,
-        imageUrl: imageUrlState,
-        paymentMethodId,
-        timestamp: new Date(),
-      });
-    } catch (error) {
-      console.error("Error saving checkout data:", error);
-      throw error; // Throw error for better error handling
-    }
-  };
+  
   
 
   return (
