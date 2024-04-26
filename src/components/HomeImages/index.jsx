@@ -65,8 +65,8 @@ export default function HomeImages() {
   return (
     <div className="mt-20">
       <div className="text-center text-gray-900 space-y-4">
-        <h1 className="text-5xl font-bold">See AI-made Images</h1>
-        <p className="text-2xl p-2">We created a few images</p>
+        <h1 className="text-5xl font-bold">Your history</h1>
+        <p className="text-2xl p-2">what your brain has imagined</p>
       </div>
       <div className="grid grid-cols-4 gap-2">
         {images.slice().reverse().map(image => (
