@@ -1,4 +1,18 @@
 /* HomeImages.css */
+.home-images-title h1{
+
+  font-size: 50px;
+  font-weight: 800;
+  font-family: "Poppins";
+  text-transform: capitalize;
+  word-spacing: 10px;
+}
+.home-images-title p{
+  font-size: 18px;
+  color: rgb(96, 87, 87);
+  margin-top: 0px;
+  padding-top: 0px !important;
+}
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));

@@ -64,7 +64,7 @@ export default function HomeImages() {
 
   return (
     <div className="mt-20">
-      <div className="text-center text-gray-900 space-y-4">
+      <div className="text-center text-gray-900 space-y-4 home-images-title">
         <h1 className="text-5xl font-bold">Your history</h1>
         <p className="text-2xl p-2">what your brain has imagined</p>
       </div>
