@@ -340,24 +340,17 @@ const ImageGenerator = () => {
                       className="d-flex align-items-center justify-content-center gap-4 "
                       style={{ fontWeight: '600', fontSize: '18px' }}
                     >
-                      <option value="vivid">Vivid</option>
-                      <option value="natural">Natural</option>
-                      <option value="Anime">Anime</option>
-                      <option value="Realistic">Realistic</option>
-                      <option value="Impressionism">Impressionism</option>
-                      <option value="Post-Impressionism">
-                        Post-Impressionism
+                      <option value="Pixar-Syle">Pixar Syle</option>
+                      <option value="Hyper-Realistic">Hyper Realistic</option>
+                      <option value="Cyberpunk">Cyberpunk</option>
+                      <option value="Abstract">Abstract </option>
+                      <option value="Oil-Painting">Oil Painting</option>
+                      <option value="Anime">
+                      Anime
                       </option>
-                      <option value="Pointillism">Pointillism</option>
-                      <option value="Cubism">Cubism</option>
-                      <option value="Fauvism">Fauvism</option>
-                      <option value="Pop Art">Pop Art</option>
-                      <option value="Minimalism">Minimalism</option>
-                      <option value="Abstract Expressionism">
-                        Abstract Expressionism
-                      </option>
-                      <option value="Surrealism">Surrealism</option>
-                      <option value="Hyperrealism">Hyperrealism</option>
+                      <option value="Action-Movies">Action Movies</option>
+                      <option value="Retro-Pixel-Art">Retro Pixel Art</option>
+                      <option value="Comic-Book">Comic Book</option>
                     </Form.Select>
                   </Form.Group>
                 </Card.Body>
